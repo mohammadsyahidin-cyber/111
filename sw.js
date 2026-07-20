@@ -1,4 +1,4 @@
-const BASE_PATH = "/111/";
+const BASE_PATH = new URL(self.registration.scope).pathname;
 const CACHE_NAME = "shanding-pwa-v2";
 
 self.addEventListener("install", (event) => {
