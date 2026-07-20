@@ -1,7 +1,8 @@
-const CACHE_NAME = "shanding-pwa-v1";
+const BASE_PATH = "/111/";
+const CACHE_NAME = "shanding-pwa-v2";
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(["/"])));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([BASE_PATH])));
   self.skipWaiting();
 });
 
@@ -16,7 +17,7 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
 
   if (event.request.mode === "navigate") {
-    event.respondWith(fetch(event.request).catch(() => caches.match("/")));
+    event.respondWith(fetch(event.request).catch(() => caches.match(BASE_PATH)));
     return;
   }
 

@@ -3,15 +3,15 @@
   "short_name": "山顶",
   "description": "记录、浏览和保存普通人的人物档案",
   "lang": "zh-CN",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/111/",
+  "scope": "/111/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f7f3ea",
   "theme_color": "#274b3e",
   "icons": [
     {
-      "src": "/qr-shanding.png",
+      "src": "/111/qr-shanding.png",
       "sizes": "560x560",
       "type": "image/png",
       "purpose": "any maskable"
