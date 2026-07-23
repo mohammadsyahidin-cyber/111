@@ -8,13 +8,11 @@ import {
   BatteryMedium,
   Check,
   CheckCircle2,
-  ChevronDown,
   ChevronRight,
   Circle,
   Clock3,
   FileText,
   Flag,
-  Lightbulb,
   ListChecks,
   Menu,
   MessageCircle,
@@ -33,6 +31,7 @@ import {
 } from "lucide-react";
 
 type Screen =
+  | "create-intro"
   | "create"
   | "home"
   | "discovery"
@@ -114,7 +113,7 @@ const discoveryQuestions = [
   },
   {
     question: "如果现在先讲一个完整故事，您最想从哪件事开始？",
-    hint: "这个回答会帮助小青推荐第一次深入采访的主题。",
+    hint: "这个回答会帮助生成更贴近您的完整采访提纲。",
     transcript:
       "那就先从第一次走进乡村教室讲起吧。那一天我到现在还记得，窗户破着，孩子们都坐得很直。",
   },
@@ -269,7 +268,7 @@ const updatedChapters: ChapterItem[] = initialChapters.map((chapter) => {
         {
           id: "umbrella",
           title: "王校长借给我的那把伞",
-          meta: "新线索 · 建议下次采访",
+          meta: "新线索 · 本次采访新增",
           description: "一把旧雨伞，和一位年轻教师最终留下来的原因。",
           accent: "gold",
           status: "new",
@@ -311,7 +310,7 @@ function formatTime(totalSeconds: number) {
 }
 
 export default function Home() {
-  const [screen, setScreen] = useState<Screen>("create");
+  const [screen, setScreen] = useState<Screen>("create-intro");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [isDiscoveryRecording, setIsDiscoveryRecording] = useState(false);
@@ -339,7 +338,6 @@ export default function Home() {
   const [questionStates, setQuestionStates] = useState<
     Array<"pending" | "done" | "skipped">
   >(interviewQuestions.map(() => "pending"));
-  const [showOptional, setShowOptional] = useState(false);
   const [factConfirmed, setFactConfirmed] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
@@ -397,7 +395,7 @@ export default function Home() {
   const currentAnswer = answers[questionIndex];
   const answeredCount = answers.filter(Boolean).length;
   const navTitle =
-    screen === "create"
+    screen === "create-intro" || screen === "create"
       ? "山顶传记"
       : screen === "home"
       ? "山顶传记"
@@ -533,6 +531,7 @@ export default function Home() {
     setNewBiographyBirthYear("");
     setNewBiographyHometown("");
     resetPrototype();
+    setScreen("home");
   }
 
   function prepareNewBiography() {
@@ -541,7 +540,7 @@ export default function Home() {
     setNewBiographyRelation("母亲");
     setNewBiographyBirthYear("");
     setNewBiographyHometown("");
-    setScreen("create");
+    setScreen("create-intro");
   }
 
   function openBiographySwitcher() {
@@ -565,7 +564,7 @@ export default function Home() {
   }
 
   const leftControl: "none" | "menu" | "back" =
-    screen === "create"
+    screen === "create-intro"
       ? "none"
       : screen === "home" ||
     screen === "outline" ||
@@ -579,6 +578,10 @@ export default function Home() {
     if (leftControl === "none") return;
     if (leftControl === "menu") {
       setShowSideMenu(true);
+      return;
+    }
+    if (screen === "create") {
+      setScreen("create-intro");
       return;
     }
     if (screen === "discovery") {
@@ -620,6 +623,7 @@ export default function Home() {
   }
 
   const backdropClass =
+    screen === "create-intro" ||
     screen === "create" ||
     screen === "home" ||
     screen === "discovery" ||
@@ -864,6 +868,10 @@ export default function Home() {
         )}
 
         <div className={`screen-content ${backdropClass}`}>
+          {screen === "create-intro" && (
+            <CreateBiographyEntryScreen onStart={() => setScreen("create")} />
+          )}
+
           {screen === "create" && (
             <CreateBiographyScreen
               name={newBiographyName}
@@ -964,8 +972,6 @@ export default function Home() {
           {screen === "guide" && (
             <GuideScreen
               module={selectedModule}
-              showOptional={showOptional}
-              onToggleOptional={() => setShowOptional((value) => !value)}
               onStart={startRecording}
             />
           )}
@@ -1025,6 +1031,24 @@ export default function Home() {
   );
 }
 
+function CreateBiographyEntryScreen({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="screen create-entry-screen">
+      <section className="create-entry-card">
+        <span className="eyebrow">山顶传记</span>
+        <h1>创建一本传记</h1>
+        <p>
+          从一个想记录的人开始，把散落的回忆慢慢整理成可以留下来的故事。
+        </p>
+        <button type="button" className="create-entry-button" onClick={onStart}>
+          创建一本传记
+          <ArrowRight size={18} />
+        </button>
+      </section>
+    </div>
+  );
+}
+
 function CreateBiographyScreen({
   name,
   relation,
@@ -1054,23 +1078,7 @@ function CreateBiographyScreen({
         </div>
         <span className="eyebrow">从一个名字开始</span>
         <h1>想记录谁的人生？</h1>
-        <p>先填写几项基本信息，后续问题和采访提纲会围绕 TA 生成。</p>
-        <div className="create-flow-hint">
-          <span>
-            <i>1</i>
-            建立档案
-          </span>
-          <b />
-          <span>
-            <i>2</i>
-            初步了解
-          </span>
-          <b />
-          <span>
-            <i>3</i>
-            生成提纲
-          </span>
-        </div>
+        <p>先填写几项基本信息，让后面的提问更贴近这个人真实的生活。</p>
 
         <div className="create-biography-form">
           <label className="create-name-field">
@@ -1441,7 +1449,7 @@ function ArticlesScreen({ onOpen }: { onOpen: () => void }) {
       </div>
       <button type="button" className="article-library-card" onClick={onOpen}>
         <img
-          src="/article-first-class-1976.png"
+          src="/first-classroom-1976.png"
           alt="1976 年，一位年轻教师第一次走进乡村教室"
         />
         <span>
@@ -1549,7 +1557,6 @@ function DiscoveryScreen({
             )}
           </button>
           <strong>{isRecording ? "点击结束回答" : "点击开始录音回答"}</strong>
-          <small>请让回答者靠近手机，正常说话即可</small>
         </div>
       )}
 
@@ -1853,13 +1860,9 @@ function ChapterScreen({
 
 function GuideScreen({
   module,
-  showOptional,
-  onToggleOptional,
   onStart,
 }: {
   module: ModuleItem;
-  showOptional: boolean;
-  onToggleOptional: () => void;
   onStart: () => void;
 }) {
   return (
@@ -1877,13 +1880,6 @@ function GuideScreen({
         </div>
       </div>
 
-      <div className="interview-tip">
-        <Lightbulb size={19} />
-        <p>
-          不必按顺序问完。妈妈讲到有意思的地方，可以顺着继续聊；不合适的问题直接跳过。
-        </p>
-      </div>
-
       <div className="question-section">
         <div className="section-label">
           <span>核心问题</span>
@@ -1898,30 +1894,6 @@ function GuideScreen({
           ))}
         </ol>
       </div>
-
-      <button
-        type="button"
-        className="optional-toggle"
-        onClick={onToggleOptional}
-        aria-expanded={showOptional}
-      >
-        <span>
-          <Sparkles size={17} />
-          可以顺着问
-        </span>
-        <ChevronDown
-          size={18}
-          className={showOptional ? "chevron-open" : ""}
-        />
-      </button>
-
-      {showOptional && (
-        <div className="optional-questions">
-          <p>那间教室是什么样子的？</p>
-          <p>第一堂课结束后，您做的第一件事是什么？</p>
-          <p>如果回到那一天，您最想对当时的自己说什么？</p>
-        </div>
-      )}
 
       <div className="sticky-action">
         <button className="primary-button record-button" type="button" onClick={onStart}>
@@ -2049,21 +2021,33 @@ function ArticleScreen({
 
       <article className="story-article">
         <header className="article-title-block">
-          <span className="article-kicker">第三章 · 四十年乡村讲台</span>
-          <h1>二十岁那年，<br />我第一次站上讲台</h1>
+          <div className="article-serial">
+            <span>第三章</span>
+            <i />
+            <span>故事 01</span>
+          </div>
+          <h1>
+            二十岁那年，
+            <strong>我第一次站上讲台</strong>
+          </h1>
           <p>一个年轻教师走进石桥小学的第一天，也是一段四十年教学生涯的开始。</p>
+          <div className="article-title-rule">
+            <i />
+            <span>口述传记</span>
+            <i />
+          </div>
           <div className="article-meta">
-            <span>林秀兰 口述</span>
-            <i />
-            <span>子女采访整理</span>
-            <i />
-            <span>约 1,260 字</span>
+            <span className="article-author-avatar">林</span>
+            <span className="article-author-copy">
+              <strong>林秀兰 口述</strong>
+              <small>子女采访整理 · 约 1,260 字</small>
+            </span>
           </div>
         </header>
 
         <figure className="article-cover">
           <img
-            src="/article-first-class-1976.png"
+            src="/first-classroom-1976.png"
             alt="1976 年，一位年轻教师第一次走进乡村教室"
           />
           <figcaption>

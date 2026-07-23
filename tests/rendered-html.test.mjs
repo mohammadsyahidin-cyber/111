@@ -32,9 +32,10 @@ test("server-renders the biography interview prototype", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>山顶传记 · 子女协助采访原型<\/title>/i);
-  assert.match(html, /想记录谁的人生/);
-  assert.match(html, /被记录人姓名/);
-  assert.match(html, /创建传记/);
+  assert.match(html, /创建一本传记/);
+  assert.doesNotMatch(html, /想记录谁的人生/);
+  assert.doesNotMatch(html, /被记录人姓名/);
+  assert.doesNotMatch(html, /shanding-logo/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
 
@@ -46,6 +47,7 @@ test("contains the complete clickable interview journey", async () => {
   ]);
 
   for (const state of [
+    "create-intro",
     "create",
     "home",
     "discovery",
@@ -65,6 +67,7 @@ test("contains the complete clickable interview journey", async () => {
   assert.match(page, /生成初始提纲/);
   assert.match(page, /完整采访提纲/);
   assert.match(page, /新建传记/);
+  assert.match(page, /创建一本传记/);
   assert.match(page, /传记进度/);
   assert.match(page, /每一次谈话都保留在这里/);
   assert.match(page, /查看提问与回答聊天记录/);
@@ -72,12 +75,15 @@ test("contains the complete clickable interview journey", async () => {
   assert.match(page, /家乡或长期生活地/);
   assert.match(page, /请选择一个章节/);
   assert.match(page, /切换传记/);
-  assert.match(page, /article-first-class-1976/);
+  assert.match(page, /first-classroom-1976/);
   assert.match(page, /aria-pressed/);
   assert.match(page, /第二步/);
   assert.match(page, /第三步/);
   assert.match(page, /phase-track/);
   assert.match(page, /leftControl/);
+  assert.doesNotMatch(page, /shanding-logo/);
+  assert.doesNotMatch(page, /建立档案/);
+  assert.doesNotMatch(page, /create-flow-hint/);
   assert.doesNotMatch(page, /小青建议/);
   assert.doesNotMatch(page, /摸底/);
   assert.doesNotMatch(page, /建议先采访/);
@@ -101,5 +107,5 @@ test("contains the complete clickable interview journey", async () => {
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 
   await assert.rejects(access(new URL("../app/_sites-preview", templateRoot)));
-  await access(new URL("public/article-first-class-1976.png", templateRoot));
+  await access(new URL("public/first-classroom-1976.png", templateRoot));
 });
