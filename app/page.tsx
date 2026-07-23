@@ -1,7 +1,7 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import {
   ArrowLeft,
   ArrowRight,
@@ -520,7 +520,7 @@ function DiscoveryScreen({
       {questionIndex === 0 && (
         <div className="discovery-intro">
           <div>
-            <Image src="/shanding-logo.png" alt="" width={34} height={34} />
+            <img src="/shanding-logo.png" alt="" width={34} height={34} />
             <span>先简单聊聊这一生</span>
           </div>
           <p>共 8 个固定问题，全部通过录音回答，预计 15—20 分钟。</p>
@@ -920,11 +920,9 @@ function ArticleScreen({
 
       <article>
         <div className="article-cover">
-          <Image
+          <img
             src="/lin-xiulan-teacher.png"
             alt="林秀兰老师站在教室里"
-            fill
-            sizes="(max-width: 820px) 100vw, 430px"
           />
           <span>人物图片 · 原型示例</span>
         </div>
