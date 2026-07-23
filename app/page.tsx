@@ -29,9 +29,11 @@ import {
 } from "lucide-react";
 
 type Screen =
+  | "home"
   | "discovery"
   | "processing-outline"
   | "outline"
+  | "chapter"
   | "guide"
   | "recording"
   | "processing-article"
@@ -45,7 +47,18 @@ type ModuleItem = {
   meta: string;
   description: string;
   accent: "red" | "green" | "gold" | "gray";
-  status?: "recommended" | "completed" | "new";
+  status?: "recommended" | "completed" | "new" | "moved";
+  changeNote?: string;
+};
+
+type ChapterItem = {
+  id: string;
+  order: string;
+  title: string;
+  period: string;
+  summary: string;
+  sections: ModuleItem[];
+  changeNote?: string;
 };
 
 const discoveryQuestions = [
@@ -138,32 +151,142 @@ const initialModules: ModuleItem[] = [
   },
 ];
 
-const updatedModules: ModuleItem[] = [
+const initialChapters: ChapterItem[] = [
   {
-    ...initialModules[0],
-    meta: "已生成文章 · 8 分钟前",
-    description: "《二十岁那年，我第一次站上讲台》",
-    status: "completed",
-    accent: "green",
+    id: "childhood",
+    order: "第一章",
+    title: "河流、村庄与童年",
+    period: "1956—1970",
+    summary: "从出生地、家庭关系和童年记忆，理解她最初成为怎样的人。",
+    sections: [
+      {
+        id: "village-river",
+        title: "家门口的那条河",
+        meta: "出生与故乡",
+        description: "湘潭乡下的村庄、老屋，以及每天去学校的四十分钟。",
+        accent: "gold",
+      },
+      {
+        id: "five-children",
+        title: "五个孩子的家",
+        meta: "家庭与童年",
+        description: "做木匠的父亲、在生产队劳动的母亲和一颗糖的记忆。",
+        accent: "gray",
+      },
+    ],
   },
   {
-    id: "umbrella",
-    title: "王校长借给我的那把伞",
-    meta: "新发现 · 建议下次采访",
-    description: "一把旧雨伞，和一位年轻教师留下来的原因。",
-    accent: "red",
-    status: "new",
+    id: "education",
+    order: "第二章",
+    title: "读书与人生选择",
+    period: "1970—1976",
+    summary: "那些帮助她继续读书的人，以及成为教师之前的决定。",
+    sections: [
+      initialModules[1],
+      {
+        id: "teacher-zhou",
+        title: "周老师替我申请的补助",
+        meta: "师范求学",
+        description: "一次差点发生的退学，如何改变了后来的人生。",
+        accent: "gold",
+      },
+    ],
   },
   {
-    id: "home-visit",
-    title: "第一次翻山去家访",
-    meta: "新发现",
-    description: "走了三个小时山路，只为了把一个孩子劝回课堂。",
-    accent: "gold",
-    status: "new",
+    id: "teaching",
+    order: "第三章",
+    title: "四十年乡村讲台",
+    period: "1976—2016",
+    summary: "从第一次站上讲台，到真正理解教师这份工作的意义。",
+    sections: [
+      initialModules[0],
+      initialModules[2],
+      {
+        id: "first-home-visit",
+        title: "第一次翻山去家访",
+        meta: "初到石桥小学",
+        description: "走进学生家里，也第一次看见课堂之外的生活。",
+        accent: "gray",
+      },
+    ],
   },
-  ...initialModules.slice(2),
+  {
+    id: "family",
+    order: "第四章",
+    title: "两个人撑起一个家",
+    period: "1978—至今",
+    summary: "工作、婚姻和养育子女交织在一起的家庭生活。",
+    sections: [
+      initialModules[3],
+      {
+        id: "hard-years",
+        title: "最紧巴的那些年",
+        meta: "家庭生活",
+        description: "日子并不宽裕，两个人如何分担工作和家庭。",
+        accent: "gray",
+      },
+    ],
+  },
+  {
+    id: "looking-back",
+    order: "第五章",
+    title: "离开讲台以后",
+    period: "2016—至今",
+    summary: "退休、重逢与回望，什么最终留在了她的人生里。",
+    sections: [
+      initialModules[4],
+      {
+        id: "words-for-children",
+        title: "想留给孩子们的话",
+        meta: "人生回望",
+        description: "关于选择、遗憾，以及最希望家人记住的事情。",
+        accent: "gold",
+      },
+    ],
+  },
 ];
+
+const updatedChapters: ChapterItem[] = initialChapters.map((chapter) => {
+  if (chapter.id === "teaching") {
+    return {
+      ...chapter,
+      changeNote: "本次更新：新增 2 节，完成 1 节",
+      sections: [
+        {
+          ...initialModules[0],
+          meta: "已生成文章 · 1976 年",
+          description: "《二十岁那年，我第一次站上讲台》",
+          status: "completed",
+          changeNote: "本次已成文",
+        },
+        {
+          id: "umbrella",
+          title: "王校长借给我的那把伞",
+          meta: "新线索 · 建议下次采访",
+          description: "一把旧雨伞，和一位年轻教师最终留下来的原因。",
+          accent: "gold",
+          status: "new",
+          changeNote: "本次采访新增",
+        },
+        {
+          id: "home-visit",
+          title: "第一次翻山去家访",
+          meta: "新线索",
+          description: "走了三个小时山路，只为了把一个孩子劝回课堂。",
+          accent: "gray",
+          status: "new",
+          changeNote: "由原有线索拆分为独立小节",
+        },
+        {
+          ...initialModules[2],
+          status: "moved",
+          changeNote: "顺序后移",
+        },
+      ],
+    };
+  }
+  return chapter;
+});
 
 const interviewQuestions = [
   "还记得第一次走进那间教室时，看见了什么吗？",
@@ -181,12 +304,16 @@ function formatTime(totalSeconds: number) {
 }
 
 export default function Home() {
-  const [screen, setScreen] = useState<Screen>("discovery");
+  const [screen, setScreen] = useState<Screen>("home");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [isDiscoveryRecording, setIsDiscoveryRecording] = useState(false);
   const [discoverySeconds, setDiscoverySeconds] = useState(0);
   const [selectedModule, setSelectedModule] = useState(initialModules[0]);
+  const [selectedChapter, setSelectedChapter] = useState(initialChapters[0]);
+  const [chapterReturnScreen, setChapterReturnScreen] = useState<
+    "outline" | "updated"
+  >("outline");
   const [seconds, setSeconds] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [activeInterviewQuestion, setActiveInterviewQuestion] = useState(0);
@@ -230,9 +357,11 @@ export default function Home() {
   const currentAnswer = answers[questionIndex];
   const answeredCount = answers.filter(Boolean).length;
   const navTitle =
-    screen === "discovery" || screen === "processing-outline"
+    screen === "home"
+      ? "山顶传记"
+      : screen === "discovery" || screen === "processing-outline"
       ? "初始采访"
-      : screen === "outline" || screen === "updated"
+      : screen === "outline" || screen === "updated" || screen === "chapter"
         ? "采访提纲"
         : screen === "guide" || screen === "recording"
           ? "故事采访"
@@ -301,6 +430,15 @@ export default function Home() {
     setScreen("guide");
   }
 
+  function openChapter(
+    chapter: ChapterItem,
+    returnScreen: "outline" | "updated",
+  ) {
+    setSelectedChapter(chapter);
+    setChapterReturnScreen(returnScreen);
+    setScreen("chapter");
+  }
+
   function startRecording() {
     setSeconds(0);
     setIsPaused(false);
@@ -322,16 +460,23 @@ export default function Home() {
 
   function goBack() {
     if (screen === "discovery") {
+      if (questionIndex === 0) {
+        setScreen("home");
+        return;
+      }
       previousDiscoveryQuestion();
       return;
     }
     if (screen === "outline") {
-      setScreen("discovery");
-      setQuestionIndex(discoveryQuestions.length - 1);
+      setScreen("home");
+      return;
+    }
+    if (screen === "chapter") {
+      setScreen(chapterReturnScreen);
       return;
     }
     if (screen === "guide") {
-      setScreen("outline");
+      setScreen("chapter");
       return;
     }
     if (screen === "recording") {
@@ -339,7 +484,7 @@ export default function Home() {
       return;
     }
     if (screen === "article") {
-      setScreen("guide");
+      setScreen("chapter");
       return;
     }
     if (screen === "updated") {
@@ -349,7 +494,7 @@ export default function Home() {
 
   function resetPrototype() {
     setShowMenu(false);
-    setScreen("discovery");
+    setScreen("home");
     setQuestionIndex(0);
     setAnswers([]);
     setIsDiscoveryRecording(false);
@@ -359,13 +504,14 @@ export default function Home() {
   }
 
   const canGoBack =
-    !screen.startsWith("processing") &&
-    !(screen === "discovery" && questionIndex === 0);
+    !screen.startsWith("processing") && screen !== "home";
 
   const backdropClass =
-    screen === "discovery" || screen === "processing-outline"
+    screen === "home" ||
+    screen === "discovery" ||
+    screen === "processing-outline"
       ? "backdrop-archive"
-      : screen === "outline" || screen === "updated"
+      : screen === "outline" || screen === "updated" || screen === "chapter"
         ? "backdrop-school"
         : screen === "guide" || screen === "recording"
           ? "backdrop-voice"
@@ -432,6 +578,14 @@ export default function Home() {
         </header>
 
         <div className={`screen-content ${backdropClass}`}>
+          {screen === "home" && (
+            <HomeScreen
+              answeredCount={answeredCount}
+              onStart={() => setScreen("discovery")}
+              onOutline={() => setScreen("outline")}
+            />
+          )}
+
           {screen === "discovery" && (
             <DiscoveryScreen
               questionIndex={questionIndex}
@@ -457,10 +611,17 @@ export default function Home() {
 
           {screen === "outline" && (
             <OutlineScreen
-              modules={initialModules}
+              chapters={initialChapters}
               version="v1"
-              completed={0}
+              onOpen={(chapter) => openChapter(chapter, "outline")}
+            />
+          )}
+
+          {screen === "chapter" && (
+            <ChapterScreen
+              chapter={selectedChapter}
               onOpen={openModule}
+              onArticle={() => setScreen("article")}
             />
           )}
 
@@ -511,17 +672,92 @@ export default function Home() {
 
           {screen === "updated" && (
             <UpdatedOutlineScreen
-              modules={updatedModules}
-              onOpen={(module) => {
-                setSelectedModule(module);
-                setScreen("guide");
-              }}
-              onArticle={() => setScreen("article")}
+              chapters={updatedChapters}
+              onOpen={(chapter) => openChapter(chapter, "updated")}
             />
           )}
         </div>
       </section>
     </main>
+  );
+}
+
+function HomeScreen({
+  answeredCount,
+  onStart,
+  onOutline,
+}: {
+  answeredCount: number;
+  onStart: () => void;
+  onOutline: () => void;
+}) {
+  return (
+    <div className="screen home-screen">
+      <div className="home-person">
+        <img src="/lin-xiulan-teacher.png" alt="林秀兰老师" />
+        <div>
+          <span className="eyebrow">正在创作的传记</span>
+          <h1>林秀兰的人生故事</h1>
+          <p>由家人协助采访 · 小青整理写作</p>
+        </div>
+      </div>
+
+      <div className="home-progress">
+        <div className="home-progress-head">
+          <div>
+            <span>当前进度</span>
+            <strong>{answeredCount > 0 ? "继续完成首次摸底" : "建立第一版采访提纲"}</strong>
+          </div>
+          <em>提纲 v1</em>
+        </div>
+        <div className="home-progress-track">
+          <span style={{ width: answeredCount > 0 ? "38%" : "24%" }} />
+        </div>
+        <div className="home-progress-meta">
+          <span>5 个一级章节</span>
+          <i />
+          <span>11 个采访小节</span>
+          <i />
+          <span>0 篇成文</span>
+        </div>
+      </div>
+
+      <div className="home-section-title">
+        <span>接下来</span>
+        <small>两件事可以随时切换</small>
+      </div>
+
+      <div className="home-actions">
+        <button type="button" className="home-action primary" onClick={onStart}>
+          <span className="home-action-icon">
+            <Mic size={21} />
+          </span>
+          <span>
+            <strong>{answeredCount > 0 ? "继续首次摸底" : "开始首次摸底"}</strong>
+            <small>用录音回答推荐问题，帮助小青补充提纲</small>
+          </span>
+          <ChevronRight size={19} />
+        </button>
+        <button type="button" className="home-action" onClick={onOutline}>
+          <span className="home-action-icon">
+            <ListChecks size={21} />
+          </span>
+          <span>
+            <strong>查看完整采访提纲</strong>
+            <small>查看整本书的章节与小节，也可以直接选择采访</small>
+          </span>
+          <ChevronRight size={19} />
+        </button>
+      </div>
+
+      <div className="home-latest">
+        <span>
+          <Sparkles size={16} />
+          小青建议
+        </span>
+        <p>先补充几段基础经历，再从“第一次走进乡村教室”开始深入采访。</p>
+      </div>
+    </div>
   );
 }
 
@@ -695,79 +931,148 @@ function ProcessingScreen({
 }
 
 function OutlineScreen({
-  modules,
+  chapters,
   version,
-  completed,
   onOpen,
 }: {
-  modules: ModuleItem[];
+  chapters: ChapterItem[];
   version: string;
-  completed: number;
-  onOpen: (module: ModuleItem) => void;
+  onOpen: (chapter: ChapterItem) => void;
 }) {
+  const sectionCount = chapters.reduce(
+    (total, chapter) => total + chapter.sections.length,
+    0,
+  );
   return (
     <div className="screen outline-screen">
       <div className="screen-heading compact">
-        <span className="eyebrow">采访提纲 {version}</span>
-        <h1>先从一个具体故事开始</h1>
-        <p>这份提纲来自刚才的回答。每次采访后，它都会继续补充和调整。</p>
+        <span className="eyebrow">完整采访提纲 {version}</span>
+        <h1>林秀兰的人生故事</h1>
+        <p>一级标题构成整本传记的章节，二级标题是可以逐次完成的采访小节。</p>
       </div>
 
       <div className="outline-stats">
         <div>
-          <strong>{modules.length}</strong>
-          <span>个故事方向</span>
+          <strong>{chapters.length}</strong>
+          <span>个一级章节</span>
         </div>
         <div>
-          <strong>{completed}</strong>
+          <strong>{sectionCount}</strong>
+          <span>个二级小节</span>
+        </div>
+        <div>
+          <strong>0</strong>
           <span>篇文章完成</span>
-        </div>
-        <div>
-          <strong>约 30 分钟</strong>
-          <span>本次建议</span>
         </div>
       </div>
 
       <div className="section-label">
-        <span>优先采访</span>
-        <small>不需要按顺序完成</small>
+        <span>全书结构</span>
+        <small>点击一级章节选择采访小节</small>
       </div>
 
-      <div className="module-list">
-        {modules.map((module, index) => (
+      <div className="chapter-list">
+        {chapters.map((chapter) => (
           <button
             type="button"
-            className="module-row"
-            onClick={() => onOpen(module)}
-            key={module.id}
+            className="chapter-card"
+            onClick={() => onOpen(chapter)}
+            key={chapter.id}
           >
-            <span className={`module-index ${module.accent}`}>
-              {module.status === "completed" ? <Check size={17} /> : index + 1}
-            </span>
-            <span className="module-copy">
-              <span className="module-title-line">
-                <strong>{module.title}</strong>
-                {module.status === "recommended" && <em>推荐</em>}
-                {module.status === "new" && <em className="new">新发现</em>}
-                {module.status === "completed" && <em className="done">已完成</em>}
+            <span className="chapter-order">{chapter.order}</span>
+            <span className="chapter-main">
+              <span className="chapter-title-line">
+                <strong>{chapter.title}</strong>
+                <em>{chapter.period}</em>
               </span>
-              <small>{module.meta}</small>
-              <p>{module.description}</p>
+              <p>{chapter.summary}</p>
+              <span className="chapter-section-preview">
+                {chapter.sections.map((section, index) => (
+                  <span key={section.id}>
+                    <i>{index + 1}</i>
+                    {section.title}
+                  </span>
+                ))}
+              </span>
+            </span>
+            <span className="chapter-enter">
+              {chapter.sections.length} 节
+              <ChevronRight size={17} />
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ChapterScreen({
+  chapter,
+  onOpen,
+  onArticle,
+}: {
+  chapter: ChapterItem;
+  onOpen: (module: ModuleItem) => void;
+  onArticle: () => void;
+}) {
+  return (
+    <div className="screen chapter-screen">
+      <div className="chapter-hero">
+        <span>{chapter.order}</span>
+        <h1>{chapter.title}</h1>
+        <p>{chapter.summary}</p>
+        <small>{chapter.period}</small>
+      </div>
+
+      {chapter.changeNote && (
+        <div className="chapter-change-note">
+          <Sparkles size={17} />
+          {chapter.changeNote}
+        </div>
+      )}
+
+      <div className="section-label">
+        <span>选择本次采访小节</span>
+        <small>二级标题 · 不必按顺序</small>
+      </div>
+
+      <div className="section-choice-list">
+        {chapter.sections.map((section, index) => (
+          <button
+            type="button"
+            className={`section-choice ${section.status ?? ""}`}
+            key={section.id}
+            onClick={() =>
+              section.status === "completed" ? onArticle() : onOpen(section)
+            }
+          >
+            <span className="section-number">
+              {section.status === "completed" ? <Check size={16} /> : index + 1}
+            </span>
+            <span className="section-choice-copy">
+              <span>
+                <strong>{section.title}</strong>
+                {section.status === "recommended" && <em>建议先采访</em>}
+                {section.status === "new" && <em className="new">新增</em>}
+                {section.status === "completed" && <em className="done">已成文</em>}
+                {section.status === "moved" && <em className="moved">顺序调整</em>}
+              </span>
+              <small>{section.meta}</small>
+              <p>{section.description}</p>
+              {section.changeNote && (
+                <mark>
+                  <Sparkles size={13} />
+                  {section.changeNote}
+                </mark>
+              )}
             </span>
             <ChevronRight size={18} />
           </button>
         ))}
       </div>
 
-      <div className="sticky-action outline-action">
-        <button
-          className="primary-button"
-          type="button"
-          onClick={() => onOpen(modules[0])}
-        >
-          从推荐故事开始
-          <ArrowRight size={18} />
-        </button>
+      <div className="chapter-footnote">
+        选择小节后，小青会给出这一节的采访问题；实际交流中仍可自由追问或跳过。
       </div>
     </div>
   );
@@ -787,7 +1092,7 @@ function GuideScreen({
   return (
     <div className="screen guide-screen">
       <div className="topic-band">
-        <span className="eyebrow">本次采访</span>
+        <span className="eyebrow">本次采访小节</span>
         <h1>{module.title}</h1>
         <div className="topic-meta">
           <span>
@@ -1029,13 +1334,11 @@ function ArticleScreen({
 }
 
 function UpdatedOutlineScreen({
-  modules,
+  chapters,
   onOpen,
-  onArticle,
 }: {
-  modules: ModuleItem[];
-  onOpen: (module: ModuleItem) => void;
-  onArticle: () => void;
+  chapters: ChapterItem[];
+  onOpen: (chapter: ChapterItem) => void;
 }) {
   return (
     <div className="screen updated-screen">
@@ -1045,64 +1348,69 @@ function UpdatedOutlineScreen({
         </div>
         <div>
           <span className="eyebrow">采访提纲已更新为 v2</span>
-          <h1>这次谈话带来了两个新故事</h1>
-          <p>已完成 1 个模块，新增 2 条线索，并调整了下一次采访重点。</p>
+          <h1>完整提纲已记录本次变化</h1>
+          <p>全书仍保留 5 个一级章节；第三章新增 2 个二级小节，完成 1 节，并调整 1 节顺序。</p>
         </div>
       </div>
 
-      <div className="change-strip">
+      <div className="outline-change-legend">
         <span>
-          <Check size={15} /> 1 篇文章
+          <i className="done" />
+          已成文
         </span>
         <span>
-          <Sparkles size={15} /> 2 个新故事
+          <i className="new" />
+          本次新增
         </span>
         <span>
-          <ListChecks size={15} /> 6 个待采访
+          <i className="moved" />
+          顺序调整
         </span>
       </div>
 
       <div className="section-label">
-        <span>更新后的采访提纲</span>
-        <small>已按建议顺序排列</small>
+        <span>更新后的完整提纲</span>
+        <small>变化已标注在对应章节与小节</small>
       </div>
 
-      <div className="module-list updated-list">
-        {modules.map((module, index) => (
+      <div className="chapter-list updated-outline-tree">
+        {chapters.map((chapter) => (
           <button
             type="button"
-            className="module-row"
-            onClick={() =>
-              module.status === "completed" ? onArticle() : onOpen(module)
-            }
-            key={`${module.id}-${index}`}
+            className={`chapter-card ${chapter.changeNote ? "has-change" : ""}`}
+            onClick={() => onOpen(chapter)}
+            key={chapter.id}
           >
-            <span className={`module-index ${module.accent}`}>
-              {module.status === "completed" ? <Check size={17} /> : index + 1}
-            </span>
-            <span className="module-copy">
-              <span className="module-title-line">
-                <strong>{module.title}</strong>
-                {module.status === "new" && <em className="new">新发现</em>}
-                {module.status === "completed" && <em className="done">已完成</em>}
+            <span className="chapter-order">{chapter.order}</span>
+            <span className="chapter-main">
+              <span className="chapter-title-line">
+                <strong>{chapter.title}</strong>
+                <em>{chapter.period}</em>
               </span>
-              <small>{module.meta}</small>
-              <p>{module.description}</p>
+              {chapter.changeNote && (
+                <mark className="chapter-change-label">
+                  <Sparkles size={13} />
+                  {chapter.changeNote}
+                </mark>
+              )}
+              <span className="updated-section-lines">
+                {chapter.sections.map((section, index) => (
+                  <span className={section.status ?? ""} key={section.id}>
+                    <i>{index + 1}</i>
+                    <b>{section.title}</b>
+                    {section.status === "completed" && <em>已成文</em>}
+                    {section.status === "new" && <em>新增</em>}
+                    {section.status === "moved" && <em>后移</em>}
+                  </span>
+                ))}
+              </span>
             </span>
-            <ChevronRight size={18} />
+            <span className="chapter-enter">
+              查看
+              <ChevronRight size={17} />
+            </span>
           </button>
         ))}
-      </div>
-
-      <div className="sticky-action">
-        <button
-          className="primary-button"
-          type="button"
-          onClick={() => onOpen(modules[1])}
-        >
-          继续下一个故事
-          <ArrowRight size={18} />
-        </button>
       </div>
     </div>
   );
