@@ -32,9 +32,9 @@ test("server-renders the biography interview prototype", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>山顶传记 · 子女协助采访原型<\/title>/i);
-  assert.match(html, /林秀兰的人生故事/);
-  assert.match(html, /开始首次摸底/);
-  assert.match(html, /查看完整采访提纲/);
+  assert.match(html, /本次记录对象/);
+  assert.match(html, /先做一次初步了解/);
+  assert.match(html, /开始初步了解/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
 
@@ -59,6 +59,10 @@ test("contains the complete clickable interview journey", async () => {
   }
 
   assert.match(page, /生成初始提纲/);
+  assert.match(page, /完整采访提纲/);
+  assert.match(page, /新建传记/);
+  assert.doesNotMatch(page, /小青建议/);
+  assert.doesNotMatch(page, /摸底/);
   assert.match(page, /一级章节/);
   assert.match(page, /二级小节/);
   assert.match(page, /选择本次采访小节/);

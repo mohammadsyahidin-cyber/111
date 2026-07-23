@@ -15,6 +15,7 @@ import {
   Flag,
   Lightbulb,
   ListChecks,
+  Menu,
   Mic,
   MoreHorizontal,
   Pause,
@@ -25,7 +26,9 @@ import {
   SkipForward,
   Sparkles,
   Square,
+  UserRound,
   Wifi,
+  X,
 } from "lucide-react";
 
 type Screen =
@@ -323,6 +326,10 @@ export default function Home() {
   const [showOptional, setShowOptional] = useState(false);
   const [factConfirmed, setFactConfirmed] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showSideMenu, setShowSideMenu] = useState(false);
+  const [showNewBiography, setShowNewBiography] = useState(false);
+  const [biographyName, setBiographyName] = useState("林秀兰");
+  const [newBiographyName, setNewBiographyName] = useState("");
 
   useEffect(() => {
     if (screen !== "recording" || isPaused) return;
@@ -360,7 +367,7 @@ export default function Home() {
     screen === "home"
       ? "山顶传记"
       : screen === "discovery" || screen === "processing-outline"
-      ? "初始采访"
+      ? "初步了解"
       : screen === "outline" || screen === "updated" || screen === "chapter"
         ? "采访提纲"
         : screen === "guide" || screen === "recording"
@@ -503,6 +510,19 @@ export default function Home() {
     setFactConfirmed(false);
   }
 
+  function navigateFromSideMenu(nextScreen: "home" | "outline") {
+    setShowSideMenu(false);
+    setScreen(nextScreen);
+  }
+
+  function createBiography() {
+    const nextName = newBiographyName.trim();
+    if (nextName) setBiographyName(nextName);
+    setNewBiographyName("");
+    setShowNewBiography(false);
+    resetPrototype();
+  }
+
   const canGoBack =
     !screen.startsWith("processing") && screen !== "home";
 
@@ -533,12 +553,12 @@ export default function Home() {
           <button
             className="icon-button"
             type="button"
-            onClick={goBack}
-            disabled={!canGoBack}
-            aria-label="返回"
-            title="返回"
+            onClick={screen === "home" ? () => setShowSideMenu(true) : goBack}
+            disabled={screen !== "home" && !canGoBack}
+            aria-label={screen === "home" ? "打开功能菜单" : "返回"}
+            title={screen === "home" ? "功能菜单" : "返回"}
           >
-            <ArrowLeft size={21} />
+            {screen === "home" ? <Menu size={22} /> : <ArrowLeft size={21} />}
           </button>
           <div className="app-title">{navTitle}</div>
           <div className="menu-wrap">
@@ -577,12 +597,121 @@ export default function Home() {
           </div>
         </header>
 
+        {showSideMenu && (
+          <>
+            <button
+              type="button"
+              className="side-menu-backdrop"
+              aria-label="关闭功能菜单"
+              onClick={() => setShowSideMenu(false)}
+            />
+            <aside className="side-menu" aria-label="功能菜单">
+              <div className="side-menu-head">
+                <div>
+                  <span>山顶传记</span>
+                  <strong>{biographyName}的人生故事</strong>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowSideMenu(false)}
+                  aria-label="关闭"
+                  title="关闭"
+                >
+                  <X size={19} />
+                </button>
+              </div>
+              <nav>
+                <button
+                  type="button"
+                  className={screen === "home" || screen === "discovery" ? "active" : ""}
+                  onClick={() => navigateFromSideMenu("home")}
+                >
+                  <Mic size={18} />
+                  <span>
+                    <strong>初步了解</strong>
+                    <small>回答基础问题，生成首版提纲</small>
+                  </span>
+                  <ChevronRight size={17} />
+                </button>
+                <button
+                  type="button"
+                  className={
+                    screen === "outline" || screen === "chapter" ? "active" : ""
+                  }
+                  onClick={() => navigateFromSideMenu("outline")}
+                >
+                  <ListChecks size={18} />
+                  <span>
+                    <strong>完整采访提纲</strong>
+                    <small>查看章节、小节与采访进度</small>
+                  </span>
+                  <ChevronRight size={17} />
+                </button>
+              </nav>
+              <button
+                type="button"
+                className="new-biography-button"
+                onClick={() => {
+                  setShowSideMenu(false);
+                  setShowNewBiography(true);
+                }}
+              >
+                <UserRound size={18} />
+                新建传记
+              </button>
+            </aside>
+          </>
+        )}
+
+        {showNewBiography && (
+          <div className="dialog-backdrop" role="presentation">
+            <div className="new-biography-dialog" role="dialog" aria-modal="true">
+              <div className="dialog-head">
+                <div>
+                  <span className="eyebrow">新建传记</span>
+                  <h2>这本传记要写给谁？</h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowNewBiography(false)}
+                  aria-label="关闭"
+                  title="关闭"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <label>
+                被记录人的姓名
+                <input
+                  value={newBiographyName}
+                  onChange={(event) => setNewBiographyName(event.target.value)}
+                  placeholder="例如：李建国"
+                  autoFocus
+                />
+              </label>
+              <p>创建后会从“初步了解”开始，逐步生成这本传记的采访提纲。</p>
+              <div className="dialog-actions">
+                <button type="button" onClick={() => setShowNewBiography(false)}>
+                  取消
+                </button>
+                <button
+                  type="button"
+                  className="dialog-primary"
+                  onClick={createBiography}
+                  disabled={!newBiographyName.trim()}
+                >
+                  创建并开始
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className={`screen-content ${backdropClass}`}>
           {screen === "home" && (
             <HomeScreen
-              answeredCount={answeredCount}
+              biographyName={biographyName}
               onStart={() => setScreen("discovery")}
-              onOutline={() => setScreen("outline")}
             />
           )}
 
@@ -683,80 +812,75 @@ export default function Home() {
 }
 
 function HomeScreen({
-  answeredCount,
+  biographyName,
   onStart,
-  onOutline,
 }: {
-  answeredCount: number;
+  biographyName: string;
   onStart: () => void;
-  onOutline: () => void;
 }) {
   return (
     <div className="screen home-screen">
-      <div className="home-person">
-        <img src="/lin-xiulan-teacher.png" alt="林秀兰老师" />
-        <div>
-          <span className="eyebrow">正在创作的传记</span>
-          <h1>林秀兰的人生故事</h1>
-          <p>由家人协助采访 · 小青整理写作</p>
-        </div>
+      <div className="intro-step">
+        <span>第一步</span>
+        <small>建立对 {biographyName} 人生经历的基本了解</small>
       </div>
 
-      <div className="home-progress">
-        <div className="home-progress-head">
-          <div>
-            <span>当前进度</span>
-            <strong>{answeredCount > 0 ? "继续完成首次摸底" : "建立第一版采访提纲"}</strong>
-          </div>
-          <em>提纲 v1</em>
-        </div>
-        <div className="home-progress-track">
-          <span style={{ width: answeredCount > 0 ? "38%" : "24%" }} />
-        </div>
-        <div className="home-progress-meta">
-          <span>5 个一级章节</span>
-          <i />
-          <span>11 个采访小节</span>
-          <i />
-          <span>0 篇成文</span>
-        </div>
-      </div>
-
-      <div className="home-section-title">
-        <span>接下来</span>
-        <small>两件事可以随时切换</small>
-      </div>
-
-      <div className="home-actions">
-        <button type="button" className="home-action primary" onClick={onStart}>
-          <span className="home-action-icon">
-            <Mic size={21} />
-          </span>
-          <span>
-            <strong>{answeredCount > 0 ? "继续首次摸底" : "开始首次摸底"}</strong>
-            <small>用录音回答推荐问题，帮助小青补充提纲</small>
-          </span>
-          <ChevronRight size={19} />
-        </button>
-        <button type="button" className="home-action" onClick={onOutline}>
-          <span className="home-action-icon">
-            <ListChecks size={21} />
-          </span>
-          <span>
-            <strong>查看完整采访提纲</strong>
-            <small>查看整本书的章节与小节，也可以直接选择采访</small>
-          </span>
-          <ChevronRight size={19} />
-        </button>
-      </div>
-
-      <div className="home-latest">
-        <span>
-          <Sparkles size={16} />
-          小青建议
+      <div className="intro-hero">
+        <span className="intro-hero-mark">
+          <Mic size={23} />
         </span>
-        <p>先补充几段基础经历，再从“第一次走进乡村教室”开始深入采访。</p>
+        <h1>先做一次初步了解</h1>
+        <p>
+          这不是正式的深入采访。先通过几个基础问题，了解重要的人生阶段、人物和故事线索。
+        </p>
+        <div className="intro-person">
+          <img src="/lin-xiulan-teacher.png" alt={`${biographyName}的传记`} />
+          <span>
+            <small>本次记录对象</small>
+            <strong>{biographyName}</strong>
+          </span>
+        </div>
       </div>
+
+      <div className="intro-explain">
+        <div className="section-label">
+          <span>这个环节会怎样进行</span>
+          <small>预计 10—15 分钟</small>
+        </div>
+        <ol>
+          <li>
+            <span>1</span>
+            <p>
+              <strong>用录音回答 8 个推荐问题</strong>
+              <small>本人或协助采访的家人都可以回答。</small>
+            </p>
+          </li>
+          <li>
+            <span>2</span>
+            <p>
+              <strong>不清楚的问题可以跳过</strong>
+              <small>信息足够时，也可以提前结束这个环节。</small>
+            </p>
+          </li>
+          <li>
+            <span>3</span>
+            <p>
+              <strong>生成第一版完整采访提纲</strong>
+              <small>之后再按章节选择具体小节，一点点深入采访。</small>
+            </p>
+          </li>
+        </ol>
+      </div>
+
+      <div className="intro-note">
+        <Lightbulb size={17} />
+        <p>不用一次说得完整，也不用严格按时间顺序。先说记得最清楚的部分即可。</p>
+      </div>
+
+      <button type="button" className="intro-start-button" onClick={onStart}>
+        开始初步了解
+        <ArrowRight size={18} />
+      </button>
     </div>
   );
 }

@@ -2171,6 +2171,451 @@ button:focus-visible {
   color: #704b44;
 }
 
+.side-menu-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  padding: 0;
+  border: 0;
+  background: rgba(19, 18, 16, 0.34);
+  cursor: default;
+  backdrop-filter: blur(2px);
+}
+
+.side-menu {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 41;
+  width: min(82%, 315px);
+  display: flex;
+  flex-direction: column;
+  padding: 50px 17px 20px;
+  color: var(--ink);
+  background: rgba(250, 249, 245, 0.97);
+  box-shadow: 20px 0 48px rgba(20, 19, 17, 0.22);
+  backdrop-filter: blur(24px);
+  animation: side-menu-enter 180ms ease-out;
+}
+
+@keyframes side-menu-enter {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.side-menu-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px 19px;
+  border-bottom: 1px solid var(--line);
+}
+
+.side-menu-head > div {
+  display: grid;
+  gap: 5px;
+}
+
+.side-menu-head span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.side-menu-head strong {
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 18px;
+}
+
+.side-menu-head > button,
+.dialog-head > button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(38, 36, 32, 0.09);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow:
+    0 7px 17px rgba(28, 26, 22, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+.side-menu nav {
+  margin-top: 17px;
+  display: grid;
+  gap: 7px;
+}
+
+.side-menu nav > button {
+  width: 100%;
+  min-height: 65px;
+  display: grid;
+  grid-template-columns: 34px 1fr 17px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.side-menu nav > button.active {
+  border-color: rgba(38, 36, 32, 0.1);
+  background: rgba(235, 232, 224, 0.86);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+
+.side-menu nav > button > svg:first-child {
+  width: 34px;
+  height: 34px;
+  padding: 8px;
+  border-radius: 50%;
+  background: rgba(37, 37, 34, 0.07);
+}
+
+.side-menu nav > button > span {
+  display: grid;
+  gap: 4px;
+}
+
+.side-menu nav strong {
+  font-size: 12px;
+}
+
+.side-menu nav small {
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.side-menu nav > button > svg:last-child {
+  color: #8c8880;
+}
+
+.new-biography-button {
+  min-height: 45px;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: white;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow:
+    0 13px 28px rgba(27, 26, 23, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.23),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dialog-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(19, 18, 16, 0.42);
+  backdrop-filter: blur(5px);
+}
+
+.new-biography-dialog {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 8px;
+  background: rgba(251, 250, 247, 0.97);
+  box-shadow: 0 24px 60px rgba(20, 19, 17, 0.3);
+}
+
+.dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dialog-head h2 {
+  margin: 7px 0 0;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 22px;
+}
+
+.new-biography-dialog label {
+  margin-top: 22px;
+  display: grid;
+  gap: 8px;
+  color: #4d4a43;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.new-biography-dialog input {
+  width: 100%;
+  height: 46px;
+  padding: 0 13px;
+  color: var(--ink);
+  border: 1px solid rgba(43, 40, 36, 0.14);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: inset 0 1px 3px rgba(35, 33, 29, 0.06);
+}
+
+.new-biography-dialog input:focus {
+  border-color: rgba(168, 134, 79, 0.66);
+  box-shadow: 0 0 0 3px rgba(168, 134, 79, 0.1);
+}
+
+.new-biography-dialog > p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.dialog-actions {
+  margin-top: 21px;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 9px;
+}
+
+.dialog-actions button {
+  min-height: 43px;
+  border: 1px solid rgba(40, 38, 34, 0.1);
+  border-radius: 999px;
+  background: rgba(239, 236, 228, 0.9);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dialog-actions .dialog-primary {
+  color: white;
+  background: var(--primary);
+  box-shadow:
+    0 10px 22px rgba(27, 26, 23, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.dialog-actions .dialog-primary:disabled {
+  color: #9d9990;
+  background: #e4e1da;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.intro-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5f5b54;
+}
+
+.intro-step span {
+  padding: 5px 9px;
+  color: #6f5733;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.intro-step small {
+  font-size: 10px;
+}
+
+.intro-hero {
+  margin-top: 14px;
+  padding: 22px 20px 19px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(32, 32, 29, 0.92);
+  box-shadow:
+    0 20px 44px rgba(22, 21, 18, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(16px);
+}
+
+.intro-hero-mark {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  color: #2a2824;
+  border-radius: 50%;
+  background: #efe1c7;
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.intro-hero h1 {
+  margin: 17px 0 0;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+.intro-hero > p {
+  margin: 11px 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.intro-person {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.intro-person img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  object-position: center 24%;
+  border-radius: 50%;
+}
+
+.intro-person > span {
+  display: grid;
+  gap: 3px;
+}
+
+.intro-person small {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+}
+
+.intro-person strong {
+  font-size: 12px;
+}
+
+.intro-explain {
+  margin-top: 17px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  background: rgba(251, 250, 247, 0.82);
+  box-shadow: 0 15px 34px rgba(28, 26, 22, 0.13);
+  backdrop-filter: blur(18px);
+}
+
+.intro-explain .section-label {
+  margin-top: 0;
+}
+
+.intro-explain ol {
+  list-style: none;
+  margin: 13px 0 0;
+  padding: 0;
+  display: grid;
+}
+
+.intro-explain li {
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  padding: 11px 0;
+  position: relative;
+}
+
+.intro-explain li + li {
+  border-top: 1px solid var(--line);
+}
+
+.intro-explain li > span {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  color: #6f5733;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.intro-explain li p {
+  margin: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.intro-explain li strong {
+  font-size: 12px;
+}
+
+.intro-explain li small {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.intro-note {
+  margin-top: 13px;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  padding: 12px 13px;
+  color: #675233;
+  border: 1px solid rgba(168, 134, 79, 0.2);
+  border-radius: 8px;
+  background: rgba(247, 239, 223, 0.84);
+  box-shadow: 0 10px 24px rgba(28, 26, 22, 0.09);
+  backdrop-filter: blur(15px);
+}
+
+.intro-note p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.intro-start-button {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: white;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow:
+    0 14px 30px rgba(27, 26, 23, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.23),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.18);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.intro-start-button:active {
+  transform: translateY(1px);
+}
+
 @media (max-height: 720px) and (min-width: 821px) {
   .device-shell {
     height: calc(100vh - 20px);
