@@ -12,10 +12,12 @@ import {
   ChevronRight,
   Circle,
   Clock3,
+  FileText,
   Flag,
   Lightbulb,
   ListChecks,
   Menu,
+  MessageCircle,
   Mic,
   MoreHorizontal,
   Pause,
@@ -38,6 +40,8 @@ type Screen =
   | "outline"
   | "chapter"
   | "records"
+  | "conversation"
+  | "articles"
   | "guide"
   | "recording"
   | "processing-article"
@@ -319,8 +323,11 @@ export default function Home() {
     "outline" | "updated"
   >("outline");
   const [articleParentScreen, setArticleParentScreen] = useState<
-    "chapter" | "records" | "guide"
+    "chapter" | "articles" | "guide"
   >("chapter");
+  const [discoveryParentScreen, setDiscoveryParentScreen] = useState<
+    "home" | "records"
+  >("home");
   const [recordView, setRecordView] = useState<"discovery" | "deep">(
     "discovery",
   );
@@ -340,6 +347,9 @@ export default function Home() {
   const [showNewBiography, setShowNewBiography] = useState(false);
   const [biographyName, setBiographyName] = useState("林秀兰");
   const [newBiographyName, setNewBiographyName] = useState("");
+  const [newBiographyRelation, setNewBiographyRelation] = useState("母亲");
+  const [newBiographyBirthYear, setNewBiographyBirthYear] = useState("");
+  const [newBiographyHometown, setNewBiographyHometown] = useState("");
 
   useEffect(() => {
     if (screen !== "recording" || isPaused) return;
@@ -383,8 +393,10 @@ export default function Home() {
       ? "初步了解"
       : screen === "outline" || screen === "updated" || screen === "chapter"
         ? "采访提纲"
-        : screen === "records"
+        : screen === "records" || screen === "conversation"
           ? "采访记录"
+          : screen === "articles"
+            ? "传记文章"
         : screen === "guide" || screen === "recording"
           ? "故事采访"
           : "故事文章";
@@ -498,21 +510,21 @@ export default function Home() {
     const nextName = newBiographyName.trim();
     if (nextName) setBiographyName(nextName);
     setNewBiographyName("");
+    setNewBiographyRelation("母亲");
+    setNewBiographyBirthYear("");
+    setNewBiographyHometown("");
     setShowNewBiography(false);
     resetPrototype();
   }
 
-  const leftControl: "menu" | "back" | "close" | "none" =
-    screen.startsWith("processing")
-      ? "none"
-      : screen === "home" ||
-          screen === "outline" ||
-          screen === "records" ||
-          screen === "updated"
-        ? "menu"
-        : screen === "discovery" || screen === "recording"
-          ? "close"
-          : "back";
+  const leftControl: "menu" | "back" =
+    screen === "home" ||
+    screen === "outline" ||
+    screen === "records" ||
+    screen === "articles" ||
+    screen === "updated"
+      ? "menu"
+      : "back";
 
   function handleLeftControl() {
     if (leftControl === "menu") {
@@ -520,10 +532,18 @@ export default function Home() {
       return;
     }
     if (screen === "discovery") {
-      setScreen("home");
+      setScreen(discoveryParentScreen);
+      return;
+    }
+    if (screen === "processing-outline") {
+      setScreen("discovery");
       return;
     }
     if (screen === "recording") {
+      setScreen("guide");
+      return;
+    }
+    if (screen === "processing-article") {
       setScreen("guide");
       return;
     }
@@ -535,8 +555,17 @@ export default function Home() {
       setScreen("chapter");
       return;
     }
+    if (screen === "conversation") {
+      setRecordView("deep");
+      setScreen("records");
+      return;
+    }
     if (screen === "article") {
       setScreen(articleParentScreen);
+      return;
+    }
+    if (screen === "processing-update") {
+      setScreen("article");
     }
   }
 
@@ -548,7 +577,8 @@ export default function Home() {
       : screen === "outline" ||
           screen === "updated" ||
           screen === "chapter" ||
-          screen === "records"
+          screen === "records" ||
+          screen === "conversation"
         ? "backdrop-school"
         : screen === "guide" || screen === "recording"
           ? "backdrop-voice"
@@ -571,26 +601,11 @@ export default function Home() {
             className="icon-button"
             type="button"
             onClick={handleLeftControl}
-            disabled={leftControl === "none"}
-            aria-label={
-              leftControl === "menu"
-                ? "打开功能菜单"
-                : leftControl === "close"
-                  ? "退出当前任务"
-                  : "返回"
-            }
-            title={
-              leftControl === "menu"
-                ? "功能菜单"
-                : leftControl === "close"
-                  ? "退出"
-                  : "返回"
-            }
+            aria-label={leftControl === "menu" ? "打开功能菜单" : "返回"}
+            title={leftControl === "menu" ? "功能菜单" : "返回"}
           >
             {leftControl === "menu" ? (
               <Menu size={22} />
-            ) : leftControl === "close" ? (
-              <X size={21} />
             ) : (
               <ArrowLeft size={21} />
             )}
@@ -703,13 +718,29 @@ export default function Home() {
                     <strong>深度采访</strong>
                     <small>
                       {journeyStage === "deep"
-                        ? "选择章节并开始采访"
+                        ? "查看提问与回答聊天记录"
                         : "提纲生成后开始"}
                     </small>
                   </span>
                   <em>{journeyStage === "deep" ? "进行中" : "待开始"}</em>
                 </button>
               </nav>
+              <div className="side-content-title">内容成果</div>
+              <button
+                type="button"
+                className="side-article-entry"
+                onClick={() => {
+                  setShowSideMenu(false);
+                  setScreen("articles");
+                }}
+              >
+                <FileText size={18} />
+                <span>
+                  <strong>传记文章</strong>
+                  <small>查看已生成的故事文章</small>
+                </span>
+                <em>1 篇</em>
+              </button>
               <button
                 type="button"
                 className="new-biography-button"
@@ -743,12 +774,50 @@ export default function Home() {
                 </button>
               </div>
               <label>
-                被记录人的姓名
+                被记录人姓名 <em>必填</em>
                 <input
                   value={newBiographyName}
                   onChange={(event) => setNewBiographyName(event.target.value)}
                   placeholder="例如：李建国"
                   autoFocus
+                />
+              </label>
+              <div className="dialog-form-grid">
+                <label>
+                  你和 TA 的关系
+                  <select
+                    value={newBiographyRelation}
+                    onChange={(event) =>
+                      setNewBiographyRelation(event.target.value)
+                    }
+                  >
+                    <option>父亲</option>
+                    <option>母亲</option>
+                    <option>其他长辈</option>
+                    <option>伴侣</option>
+                    <option>自己</option>
+                  </select>
+                </label>
+                <label>
+                  出生年份
+                  <input
+                    value={newBiographyBirthYear}
+                    onChange={(event) =>
+                      setNewBiographyBirthYear(event.target.value)
+                    }
+                    inputMode="numeric"
+                    placeholder="例如：1958"
+                  />
+                </label>
+              </div>
+              <label>
+                家乡或长期生活地
+                <input
+                  value={newBiographyHometown}
+                  onChange={(event) =>
+                    setNewBiographyHometown(event.target.value)
+                  }
+                  placeholder="例如：湖南湘潭"
                 />
               </label>
               <p>创建后会从“初步了解”开始，逐步生成这本传记的采访提纲。</p>
@@ -773,7 +842,10 @@ export default function Home() {
           {screen === "home" && (
             <HomeScreen
               biographyName={biographyName}
-              onStart={() => setScreen("discovery")}
+              onStart={() => {
+                setDiscoveryParentScreen("home");
+                setScreen("discovery");
+              }}
             />
           )}
 
@@ -826,11 +898,20 @@ export default function Home() {
               answers={answers}
               onChangeView={setRecordView}
               onResume={(index) => {
+                setDiscoveryParentScreen("records");
                 setQuestionIndex(index);
                 setScreen("discovery");
               }}
-              onArticle={() => {
-                setArticleParentScreen("records");
+              onConversation={() => setScreen("conversation")}
+            />
+          )}
+
+          {screen === "conversation" && <ConversationScreen />}
+
+          {screen === "articles" && (
+            <ArticlesScreen
+              onOpen={() => {
+                setArticleParentScreen("articles");
                 setScreen("article");
               }}
             />
@@ -905,55 +986,47 @@ function HomeScreen({
 }) {
   return (
     <div className="screen home-screen">
-      <div className="intro-hero">
-        <span className="eyebrow">第一步 · 初步了解</span>
-        <h1>先认识这段人生，再开始深入采访</h1>
-        <p>
-          通过几个录音问题，了解重要的人生阶段、人物和故事线索，并生成第一版采访提纲。
-        </p>
-        <div className="intro-person">
+      <div className="home-stage-card">
+        <div className="home-stage-person">
           <img src="/lin-xiulan-teacher.png" alt={`${biographyName}的传记`} />
           <span>
-            <small>本次记录对象</small>
-            <strong>{biographyName}</strong>
+            正在为 <strong>{biographyName}</strong> 记录人生
           </span>
         </div>
-      </div>
-
-      <div className="intro-explain home-intro-explain">
-        <div className="section-label">
-          <span>初步了解会怎样进行</span>
-          <small>预计 10—15 分钟</small>
+        <span className="home-stage-index">01</span>
+        <h1>
+          <small>第一步</small>
+          初步了解
+        </h1>
+        <p>回答几个录音问题，完成后生成第一版完整采访提纲。</p>
+        <div className="home-stage-facts">
+          <span>
+            <strong>8 个</strong>
+            推荐问题
+          </span>
+          <i />
+          <span>
+            <strong>可跳过</strong>
+            不必全部回答
+          </span>
+          <i />
+          <span>
+            <strong>10—15 分钟</strong>
+            预计用时
+          </span>
         </div>
-        <ol>
-          <li>
-            <span>1</span>
-            <p>
-              <strong>用录音回答推荐问题</strong>
-              <small>本人或协助采访的家人都可以回答。</small>
-            </p>
-          </li>
-          <li>
-            <span>2</span>
-            <p>
-              <strong>不清楚的问题可以跳过</strong>
-              <small>不必全部回答，也可以提前生成提纲。</small>
-            </p>
-          </li>
-          <li>
-            <span>3</span>
-            <p>
-              <strong>得到第一版完整采访提纲</strong>
-              <small>再按章节选择小节，逐次进行深入采访。</small>
-            </p>
-          </li>
-        </ol>
+        <button type="button" className="intro-start-button" onClick={onStart}>
+          开始初步了解
+          <ArrowRight size={18} />
+        </button>
       </div>
 
-      <button type="button" className="intro-start-button" onClick={onStart}>
-        开始初步了解
-        <ArrowRight size={18} />
-      </button>
+      <div className="home-stage-next">
+        <span>完成后</span>
+        <strong>生成第一版提纲</strong>
+        <ChevronRight size={16} />
+        <strong>选择章节深入采访</strong>
+      </div>
     </div>
   );
 }
@@ -963,13 +1036,13 @@ function RecordsScreen({
   answers,
   onChangeView,
   onResume,
-  onArticle,
+  onConversation,
 }: {
   view: "discovery" | "deep";
   answers: string[];
   onChangeView: (view: "discovery" | "deep") => void;
   onResume: (index: number) => void;
-  onArticle: () => void;
+  onConversation: () => void;
 }) {
   const completedAnswers = discoveryQuestions
     .map((question, index) => ({
@@ -1073,15 +1146,19 @@ function RecordsScreen({
             </span>
             <i />
             <span>
-              <strong>1</strong>
-              <small>篇文章</small>
+              <strong>4</strong>
+              <small>个核心问题</small>
             </span>
           </div>
 
-          <button type="button" className="deep-record-card" onClick={onArticle}>
+          <button
+            type="button"
+            className="deep-record-card"
+            onClick={onConversation}
+          >
             <div className="deep-record-top">
               <span>第三章 · 四十年乡村讲台</span>
-              <em>已成文</em>
+              <em>采访完成</em>
             </div>
             <h2>第一次走进乡村教室</h2>
             <p>2026 年 7 月 22 日 · 32:18 · 子女协助采访</p>
@@ -1091,13 +1168,118 @@ function RecordsScreen({
                 回听录音
               </span>
               <span>
-                查看文章
+                <MessageCircle size={15} />
+                查看聊天记录
                 <ChevronRight size={16} />
               </span>
             </div>
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+function ConversationScreen() {
+  const messages = [
+    {
+      role: "question",
+      speaker: "女儿",
+      text: "还记得第一次走进那间教室时，看见了什么吗？",
+      time: "00:42",
+    },
+    {
+      role: "answer",
+      speaker: "林秀兰",
+      text: "教室比我想象中还要小，窗纸破了两块，二十几个孩子坐得很直。我提着藤箱站在门口，一下把准备好的开场白全忘了。",
+      time: "01:16",
+    },
+    {
+      role: "question",
+      speaker: "女儿",
+      text: "你后来提到王校长，他那天对你说了什么？",
+      time: "04:08",
+    },
+    {
+      role: "answer",
+      speaker: "林秀兰",
+      text: "他把一把旧雨伞递给我，说山里的雨说来就来，老师不能让孩子等。我后来一直记得这句话。",
+      time: "04:31",
+    },
+    {
+      role: "question",
+      speaker: "女儿",
+      text: "那一天之后，什么时候第一次觉得自己真的成了老师？",
+      time: "09:12",
+    },
+    {
+      role: "answer",
+      speaker: "林秀兰",
+      text: "下课以后，一个扎羊角辫的小姑娘跑过来喊我林老师。就是那一声，我突然觉得自己可能真的会留在这里。",
+      time: "09:44",
+    },
+  ];
+
+  return (
+    <div className="screen conversation-screen">
+      <div className="conversation-head">
+        <span className="eyebrow">深度采访记录</span>
+        <h1>第一次走进乡村教室</h1>
+        <p>2026 年 7 月 22 日 · 32:18 · 女儿提问，林秀兰讲述</p>
+      </div>
+      <button type="button" className="conversation-audio">
+        <span>
+          <Play size={17} fill="currentColor" />
+        </span>
+        <i />
+        <i />
+        <i />
+        <i />
+        <strong>32:18</strong>
+      </button>
+      <div className="conversation-messages">
+        {messages.map((message, index) => (
+          <div
+            className={`conversation-message ${message.role}`}
+            key={`${message.time}-${index}`}
+          >
+            <span>{message.speaker}</span>
+            <p>{message.text}</p>
+            <small>{message.time}</small>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ArticlesScreen({ onOpen }: { onOpen: () => void }) {
+  return (
+    <div className="screen articles-screen">
+      <div className="records-heading">
+        <span className="eyebrow">传记文章</span>
+        <h1>已经写下来的故事</h1>
+        <p>文章来自深度采访，可以继续确认事实、修改内容并收入传记。</p>
+      </div>
+      <div className="article-library-stats">
+        <span>
+          <strong>1</strong>
+          已完成
+        </span>
+        <span>
+          <strong>10</strong>
+          待采访小节
+        </span>
+      </div>
+      <button type="button" className="article-library-card" onClick={onOpen}>
+        <img src="/lin-xiulan-teacher.png" alt="林秀兰老师站在教室里" />
+        <span>
+          <small>第三章 · 四十年乡村讲台</small>
+          <strong>二十岁那年，我第一次站上讲台</strong>
+          <em>约 1,260 字 · 已确认</em>
+        </span>
+        <ChevronRight size={18} />
+      </button>
     </div>
   );
 }
