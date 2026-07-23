@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   ArrowLeft,
@@ -19,6 +19,7 @@ import {
   MoreHorizontal,
   Pause,
   Play,
+  RefreshCw,
   RotateCcw,
   Signal,
   SkipForward,
@@ -49,42 +50,52 @@ type ModuleItem = {
 
 const discoveryQuestions = [
   {
-    eyebrow: "成长起点",
     question: "您出生在哪里，小时候主要在哪里长大？",
-    hint: "简单说一个地点和大致年代就可以。",
-    choices: [
-      "1956 年，湖南湘潭乡下",
-      "在县城出生，后来随父母搬家",
-      "出生地记不太清了",
-    ],
+    hint: "可以从出生年份、家乡和小时候住过的地方说起。",
+    transcript:
+      "我是 1956 年出生的，老家在湖南湘潭下面的一个村子。小时候一直跟着父母住在乡下，家门口有一条河，去学校要走四十多分钟。",
   },
   {
-    eyebrow: "人生阶段",
-    question: "回头看，哪段经历最能代表您的人生？",
-    hint: "先选一个最有感觉的，提纲生成后还可以继续补充。",
-    choices: ["做了四十年乡村教师", "离开家乡外出工作", "成家和养育孩子"],
+    question: "小时候家里是什么样的？有哪些人和事印象最深？",
+    hint: "可以说说家里有哪些人、父母做什么，以及童年最深的记忆。",
+    transcript:
+      "家里一共五个孩子，我排老二。父亲做木匠，母亲在生产队干活。小时候最盼着父亲从外面做工回来，他总会给我们带一点糖。",
   },
   {
-    eyebrow: "重要转折",
-    question: "有没有一件事，让后来的人生走向发生了变化？",
-    hint: "不需要讲完整，先留下一条线索。",
-    choices: [
-      "20 岁第一次站上讲台",
-      "一次意外改变了工作选择",
-      "遇见了一位影响很深的人",
-    ],
+    question: "您的读书经历是怎样的？有没有印象很深的老师或同学？",
+    hint: "不需要按年份讲完整，先说记得最清楚的部分。",
+    transcript:
+      "我读完初中以后去了县里的师范学校。那时候家里其实供不起，是班主任周老师帮我申请了补助，我才没有退学。",
   },
   {
-    eyebrow: "重要人物",
-    question: "您最想把谁写进这本传记？",
-    hint: "可以是亲人、老师、同事，也可以是一位学生。",
-    choices: ["带我入行的王校长", "一直支持我的爱人", "毕业后回来看我的学生"],
+    question: "您的第一份工作是什么？后来又经历了哪些工作变化？",
+    hint: "可以从第一次工作的地点、当时的感受说起。",
+    transcript:
+      "1976 年师范毕业后，我被分到石桥小学。那是我第一份工作，也是后来做了四十年的工作。第一天站上讲台，我紧张得把准备好的开场白全忘了。",
   },
   {
-    eyebrow: "从这里开始",
-    question: "如果先讲一段往事，您最想从哪一段开始？",
-    hint: "小青会根据前面的回答整理首版提纲。",
-    choices: ["第一次走进乡村教室", "那场涨水的夜晚", "退休那天，学生回来了"],
+    question: "您是怎样认识爱人的？成家以后经历过哪些重要变化？",
+    hint: "可以先说相识的经过，不需要一次讲完全部家庭经历。",
+    transcript:
+      "我和老陈是在学校修屋顶的时候认识的。他那时是公社里的维修工。结婚以后日子一直不宽裕，但他很支持我教书。",
+  },
+  {
+    question: "回头看，人生中最重要的转折或最困难的阶段是什么？",
+    hint: "可以是一项决定、一次离别，也可以是一段很难熬的日子。",
+    transcript:
+      "最难的是 1982 年发大水。学校进了水，有几个孩子回不了家，我们几位老师陪着他们在教室里守了一夜。",
+  },
+  {
+    question: "哪些人对您影响最大，最希望写进这本传记？",
+    hint: "亲人、老师、同事或学生都可以，也可以说说为什么。",
+    transcript:
+      "王校长对我影响最大。我刚到学校时总想回县城，是他把自己的雨伞借给我，还带着我挨家挨户去做家访。",
+  },
+  {
+    question: "如果现在先讲一个完整故事，您最想从哪件事开始？",
+    hint: "这个回答会帮助小青推荐第一次深入采访的主题。",
+    transcript:
+      "那就先从第一次走进乡村教室讲起吧。那一天我到现在还记得，窗户破着，孩子们都坐得很直。",
   },
 ];
 
@@ -173,6 +184,8 @@ export default function Home() {
   const [screen, setScreen] = useState<Screen>("discovery");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [isDiscoveryRecording, setIsDiscoveryRecording] = useState(false);
+  const [discoverySeconds, setDiscoverySeconds] = useState(0);
   const [selectedModule, setSelectedModule] = useState(initialModules[0]);
   const [seconds, setSeconds] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -191,6 +204,15 @@ export default function Home() {
   }, [screen, isPaused]);
 
   useEffect(() => {
+    if (screen !== "discovery" || !isDiscoveryRecording) return;
+    const timer = window.setInterval(
+      () => setDiscoverySeconds((value) => value + 1),
+      1000,
+    );
+    return () => window.clearInterval(timer);
+  }, [screen, isDiscoveryRecording]);
+
+  useEffect(() => {
     if (screen === "processing-outline") {
       const timer = window.setTimeout(() => setScreen("outline"), 1300);
       return () => window.clearTimeout(timer);
@@ -206,33 +228,56 @@ export default function Home() {
   }, [screen]);
 
   const currentAnswer = answers[questionIndex];
-  const journeyStep = useMemo(() => {
-    if (screen === "discovery" || screen === "processing-outline") return 1;
-    if (screen === "outline") return 2;
-    if (screen === "guide" || screen === "recording") return 3;
-    if (screen === "processing-article" || screen === "article") return 4;
-    return 5;
-  }, [screen]);
+  const navTitle =
+    screen === "discovery" || screen === "processing-outline"
+      ? "初始采访"
+      : screen === "outline" || screen === "updated"
+        ? "采访提纲"
+        : screen === "guide" || screen === "recording"
+          ? "故事采访"
+          : "故事文章";
 
-  function selectAnswer(choice: string) {
+  function toggleDiscoveryRecording() {
+    if (!isDiscoveryRecording) {
+      setDiscoverySeconds(0);
+      setIsDiscoveryRecording(true);
+      return;
+    }
+    setIsDiscoveryRecording(false);
     setAnswers((previous) => {
       const next = [...previous];
-      next[questionIndex] = choice;
+      next[questionIndex] = discoveryQuestions[questionIndex].transcript;
       return next;
     });
+  }
+
+  function resetDiscoveryRecording() {
+    setAnswers((previous) => {
+      const next = [...previous];
+      next[questionIndex] = "";
+      return next;
+    });
+    setDiscoverySeconds(0);
+    setIsDiscoveryRecording(false);
   }
 
   function nextDiscoveryQuestion() {
     if (!currentAnswer) return;
     if (questionIndex < discoveryQuestions.length - 1) {
       setQuestionIndex((value) => value + 1);
+      setDiscoverySeconds(0);
+      setIsDiscoveryRecording(false);
       return;
     }
     setScreen("processing-outline");
   }
 
   function previousDiscoveryQuestion() {
-    if (questionIndex > 0) setQuestionIndex((value) => value - 1);
+    if (questionIndex > 0) {
+      setQuestionIndex((value) => value - 1);
+      setDiscoverySeconds(0);
+      setIsDiscoveryRecording(false);
+    }
   }
 
   function openModule(module: ModuleItem) {
@@ -291,6 +336,8 @@ export default function Home() {
     setScreen("discovery");
     setQuestionIndex(0);
     setAnswers([]);
+    setIsDiscoveryRecording(false);
+    setDiscoverySeconds(0);
     setSeconds(0);
     setFactConfirmed(false);
   }
@@ -301,51 +348,6 @@ export default function Home() {
 
   return (
     <main className="prototype-stage">
-      <div className="context-panel" aria-hidden="true">
-        <div className="context-brand">
-          <Image src="/shanding-logo.png" alt="" width={42} height={42} />
-          <div>
-            <strong>山顶传记</strong>
-            <span>采访助理原型</span>
-          </div>
-        </div>
-        <div className="context-person">
-          <Image
-            src="/lin-xiulan-teacher.png"
-            alt=""
-            width={64}
-            height={64}
-          />
-          <div>
-            <span>正在记录</span>
-            <strong>林秀兰的人生故事</strong>
-            <p>1956 年生 · 湖南湘潭 · 乡村教师</p>
-          </div>
-        </div>
-        <ol className="journey-list">
-          {["初始摸底", "生成提纲", "完成采访", "形成文章", "更新提纲"].map(
-            (label, index) => (
-              <li
-                key={label}
-                className={
-                  journeyStep > index + 1
-                    ? "complete"
-                    : journeyStep === index + 1
-                      ? "active"
-                      : ""
-                }
-              >
-                <span>
-                  {journeyStep > index + 1 ? <Check size={14} /> : index + 1}
-                </span>
-                {label}
-              </li>
-            ),
-          )}
-        </ol>
-        <p className="context-note">一次只聊一个故事，让提纲跟着真实讲述生长。</p>
-      </div>
-
       <section className="device-shell" aria-label="山顶传记交互原型">
         <div className="status-bar">
           <span>9:41</span>
@@ -367,20 +369,22 @@ export default function Home() {
           >
             <ArrowLeft size={21} />
           </button>
-          <div className="app-title">
-            <Image src="/shanding-logo.png" alt="" width={24} height={24} />
-            <span>林秀兰的传记</span>
-          </div>
+          <div className="app-title">{navTitle}</div>
           <div className="menu-wrap">
-            <button
-              className="icon-button"
-              type="button"
-              onClick={() => setShowMenu((value) => !value)}
-              aria-label="更多操作"
-              title="更多操作"
-            >
-              <MoreHorizontal size={22} />
-            </button>
+            <div className="mini-program-capsule">
+              <button
+                type="button"
+                onClick={() => setShowMenu((value) => !value)}
+                aria-label="更多操作"
+                title="更多操作"
+              >
+                <MoreHorizontal size={20} />
+              </button>
+              <i />
+              <button type="button" aria-label="关闭小程序" title="关闭小程序">
+                <Circle size={17} fill="currentColor" />
+              </button>
+            </div>
             {showMenu && (
               <div className="prototype-menu">
                 <button type="button" onClick={resetPrototype}>
@@ -407,7 +411,10 @@ export default function Home() {
             <DiscoveryScreen
               questionIndex={questionIndex}
               currentAnswer={currentAnswer}
-              onSelect={selectAnswer}
+              isRecording={isDiscoveryRecording}
+              seconds={discoverySeconds}
+              onToggleRecording={toggleDiscoveryRecording}
+              onResetRecording={resetDiscoveryRecording}
               onNext={nextDiscoveryQuestion}
             />
           )}
@@ -493,22 +500,38 @@ export default function Home() {
 function DiscoveryScreen({
   questionIndex,
   currentAnswer,
-  onSelect,
+  isRecording,
+  seconds,
+  onToggleRecording,
+  onResetRecording,
   onNext,
 }: {
   questionIndex: number;
   currentAnswer?: string;
-  onSelect: (choice: string) => void;
+  isRecording: boolean;
+  seconds: number;
+  onToggleRecording: () => void;
+  onResetRecording: () => void;
   onNext: () => void;
 }) {
   const question = discoveryQuestions[questionIndex];
   return (
     <div className="screen discovery-screen">
-      <div className="progress-label">
-        <span>初始摸底</span>
-        <strong>
-          {questionIndex + 1}/{discoveryQuestions.length}
-        </strong>
+      {questionIndex === 0 && (
+        <div className="discovery-intro">
+          <div>
+            <Image src="/shanding-logo.png" alt="" width={34} height={34} />
+            <span>先简单聊聊这一生</span>
+          </div>
+          <p>共 8 个固定问题，全部通过录音回答，预计 15—20 分钟。</p>
+        </div>
+      )}
+
+      <div className="progress-label discovery-progress">
+        <span>
+          问题 {questionIndex + 1} / {discoveryQuestions.length}
+        </span>
+        <strong>约剩 {Math.max(2, 16 - questionIndex * 2)} 分钟</strong>
       </div>
       <div className="progress-track">
         <span
@@ -519,39 +542,61 @@ function DiscoveryScreen({
       </div>
 
       <div className="screen-heading">
-        <span className="eyebrow">{question.eyebrow}</span>
         <h1>{question.question}</h1>
         <p>{question.hint}</p>
       </div>
 
-      <div className="choice-list">
-        {question.choices.map((choice) => {
-          const selected = choice === currentAnswer;
-          return (
-            <button
-              key={choice}
-              type="button"
-              className={`choice-row ${selected ? "selected" : ""}`}
-              onClick={() => onSelect(choice)}
-            >
-              <span className="choice-radio">
-                {selected ? <Check size={15} /> : <Circle size={15} />}
-              </span>
-              <span>{choice}</span>
-            </button>
-          );
-        })}
-      </div>
+      {!currentAnswer && (
+        <div className={`discovery-recorder ${isRecording ? "is-recording" : ""}`}>
+          <div className="discovery-wave">
+            {Array.from({ length: 23 }, (_, index) => (
+              <i
+                key={index}
+                style={{
+                  height: isRecording
+                    ? `${12 + ((index * 13) % 33)}px`
+                    : `${6 + ((index * 7) % 8)}px`,
+                  animationDelay: `${(index % 6) * 90}ms`,
+                }}
+              />
+            ))}
+          </div>
+          <div className="discovery-time">
+            {isRecording ? formatTime(seconds) : "准备好后开始回答"}
+          </div>
+          <button
+            type="button"
+            className={`discovery-mic ${isRecording ? "stop" : ""}`}
+            onClick={onToggleRecording}
+            aria-label={isRecording ? "结束回答" : "开始录音回答"}
+          >
+            {isRecording ? (
+              <Square size={21} fill="currentColor" />
+            ) : (
+              <Mic size={24} />
+            )}
+          </button>
+          <strong>{isRecording ? "点击结束回答" : "点击开始录音回答"}</strong>
+          <small>请让回答者靠近手机，正常说话即可</small>
+        </div>
+      )}
 
-      <button
-        type="button"
-        className="voice-answer"
-        onClick={() => onSelect("我想用自己的话回答")}
-      >
-        <Mic size={18} />
-        用语音回答
-        <span>点击模拟</span>
-      </button>
+      {currentAnswer && (
+        <div className="discovery-transcript">
+          <div className="transcript-head">
+            <span>
+              <CheckCircle2 size={17} />
+              已完成录音
+            </span>
+            <small>{formatTime(Math.max(seconds, 18))}</small>
+          </div>
+          <p>{currentAnswer}</p>
+          <button type="button" onClick={onResetRecording}>
+            <RefreshCw size={15} />
+            重新录制
+          </button>
+        </div>
+      )}
 
       <div className="sticky-action">
         <button
@@ -562,7 +607,7 @@ function DiscoveryScreen({
         >
           {questionIndex === discoveryQuestions.length - 1
             ? "生成初始提纲"
-            : "继续"}
+            : "确认并进入下一题"}
           <ArrowRight size={18} />
         </button>
       </div>
