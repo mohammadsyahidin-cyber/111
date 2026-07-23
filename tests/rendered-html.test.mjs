@@ -64,7 +64,9 @@ test("contains the complete clickable interview journey", async () => {
   assert.match(page, /新建传记/);
   assert.match(page, /传记进度/);
   assert.match(page, /每一次谈话都保留在这里/);
-  assert.match(page, /查看采访录音与生成文章/);
+  assert.match(page, /选择章节并开始采访/);
+  assert.match(page, /选择章节，开始深度采访/);
+  assert.match(page, /leftControl/);
   assert.doesNotMatch(page, /小青建议/);
   assert.doesNotMatch(page, /摸底/);
   assert.match(page, /一级章节/);

@@ -315,10 +315,16 @@ export default function Home() {
   const [discoverySeconds, setDiscoverySeconds] = useState(0);
   const [selectedModule, setSelectedModule] = useState(initialModules[0]);
   const [selectedChapter, setSelectedChapter] = useState(initialChapters[0]);
-  const [chapterReturnScreen, setChapterReturnScreen] = useState<
+  const [chapterParentScreen, setChapterParentScreen] = useState<
     "outline" | "updated"
   >("outline");
+  const [articleParentScreen, setArticleParentScreen] = useState<
+    "chapter" | "records" | "guide"
+  >("chapter");
   const [recordView, setRecordView] = useState<"discovery" | "deep">(
+    "discovery",
+  );
+  const [journeyStage, setJourneyStage] = useState<"discovery" | "deep">(
     "discovery",
   );
   const [seconds, setSeconds] = useState(0);
@@ -352,7 +358,10 @@ export default function Home() {
 
   useEffect(() => {
     if (screen === "processing-outline") {
-      const timer = window.setTimeout(() => setScreen("outline"), 1300);
+      const timer = window.setTimeout(() => {
+        setJourneyStage("deep");
+        setScreen("outline");
+      }, 1300);
       return () => window.clearTimeout(timer);
     }
     if (screen === "processing-article") {
@@ -430,25 +439,16 @@ export default function Home() {
     setScreen("processing-outline");
   }
 
-  function previousDiscoveryQuestion() {
-    if (questionIndex > 0) {
-      setQuestionIndex((value) => value - 1);
-      setDiscoverySeconds(0);
-      setIsDiscoveryRecording(false);
-    }
-  }
-
   function openModule(module: ModuleItem) {
     setSelectedModule(module);
+    setJourneyStage("deep");
     setScreen("guide");
   }
 
-  function openChapter(
-    chapter: ChapterItem,
-    returnScreen: "outline" | "updated",
-  ) {
+  function openChapter(chapter: ChapterItem) {
     setSelectedChapter(chapter);
-    setChapterReturnScreen(returnScreen);
+    setChapterParentScreen(screen === "updated" ? "updated" : "outline");
+    setJourneyStage("deep");
     setScreen("chapter");
   }
 
@@ -471,44 +471,6 @@ export default function Home() {
     }
   }
 
-  function goBack() {
-    if (screen === "discovery") {
-      if (questionIndex === 0) {
-        setScreen("home");
-        return;
-      }
-      previousDiscoveryQuestion();
-      return;
-    }
-    if (screen === "outline") {
-      setScreen("home");
-      return;
-    }
-    if (screen === "chapter") {
-      setScreen(chapterReturnScreen);
-      return;
-    }
-    if (screen === "records") {
-      setScreen("home");
-      return;
-    }
-    if (screen === "guide") {
-      setScreen("chapter");
-      return;
-    }
-    if (screen === "recording") {
-      setScreen("guide");
-      return;
-    }
-    if (screen === "article") {
-      setScreen("chapter");
-      return;
-    }
-    if (screen === "updated") {
-      setScreen("article");
-    }
-  }
-
   function resetPrototype() {
     setShowMenu(false);
     setScreen("home");
@@ -518,6 +480,7 @@ export default function Home() {
     setDiscoverySeconds(0);
     setSeconds(0);
     setFactConfirmed(false);
+    setJourneyStage("discovery");
   }
 
   function navigateFromSideMenu(nextScreen: "home" | "outline") {
@@ -539,8 +502,43 @@ export default function Home() {
     resetPrototype();
   }
 
-  const canGoBack =
-    !screen.startsWith("processing") && screen !== "home";
+  const leftControl: "menu" | "back" | "close" | "none" =
+    screen.startsWith("processing")
+      ? "none"
+      : screen === "home" ||
+          screen === "outline" ||
+          screen === "records" ||
+          screen === "updated"
+        ? "menu"
+        : screen === "discovery" || screen === "recording"
+          ? "close"
+          : "back";
+
+  function handleLeftControl() {
+    if (leftControl === "menu") {
+      setShowSideMenu(true);
+      return;
+    }
+    if (screen === "discovery") {
+      setScreen("home");
+      return;
+    }
+    if (screen === "recording") {
+      setScreen("guide");
+      return;
+    }
+    if (screen === "chapter") {
+      setScreen(chapterParentScreen);
+      return;
+    }
+    if (screen === "guide") {
+      setScreen("chapter");
+      return;
+    }
+    if (screen === "article") {
+      setScreen(articleParentScreen);
+    }
+  }
 
   const backdropClass =
     screen === "home" ||
@@ -572,12 +570,30 @@ export default function Home() {
           <button
             className="icon-button"
             type="button"
-            onClick={screen === "home" ? () => setShowSideMenu(true) : goBack}
-            disabled={screen !== "home" && !canGoBack}
-            aria-label={screen === "home" ? "打开功能菜单" : "返回"}
-            title={screen === "home" ? "功能菜单" : "返回"}
+            onClick={handleLeftControl}
+            disabled={leftControl === "none"}
+            aria-label={
+              leftControl === "menu"
+                ? "打开功能菜单"
+                : leftControl === "close"
+                  ? "退出当前任务"
+                  : "返回"
+            }
+            title={
+              leftControl === "menu"
+                ? "功能菜单"
+                : leftControl === "close"
+                  ? "退出"
+                  : "返回"
+            }
           >
-            {screen === "home" ? <Menu size={22} /> : <ArrowLeft size={21} />}
+            {leftControl === "menu" ? (
+              <Menu size={22} />
+            ) : leftControl === "close" ? (
+              <X size={21} />
+            ) : (
+              <ArrowLeft size={21} />
+            )}
           </button>
           <div className="app-title">{navTitle}</div>
           <div className="menu-wrap">
@@ -605,6 +621,7 @@ export default function Home() {
                   type="button"
                   onClick={() => {
                     setShowMenu(false);
+                    setJourneyStage("deep");
                     setScreen("updated");
                   }}
                 >
@@ -646,37 +663,51 @@ export default function Home() {
               <nav className="side-progress">
                 <button
                   type="button"
-                  className="current"
+                  className={journeyStage === "discovery" ? "current" : "complete"}
                   onClick={() => openRecords("discovery")}
                 >
                   <i>1</i>
                   <span>
                     <strong>初步了解</strong>
-                    <small>{answeredCount}/8 个问题已回答</small>
+                    <small>
+                      {journeyStage === "deep"
+                        ? `${answeredCount} 条历史记录`
+                        : `${answeredCount}/8 个问题已回答`}
+                    </small>
                   </span>
-                  <em>进行中</em>
+                  <em>{journeyStage === "discovery" ? "进行中" : "已完成"}</em>
                 </button>
                 <button
                   type="button"
+                  className={journeyStage === "deep" ? "complete" : "upcoming"}
                   onClick={() => navigateFromSideMenu("outline")}
                 >
                   <i>2</i>
                   <span>
                     <strong>提纲生成</strong>
-                    <small>5 章 · 11 个采访小节</small>
+                    <small>
+                      {journeyStage === "deep"
+                        ? "5 章 · 11 个采访小节"
+                        : "完成初步了解后自动生成"}
+                    </small>
                   </span>
-                  <em>v1</em>
+                  <em>{journeyStage === "deep" ? "已生成" : "待开始"}</em>
                 </button>
                 <button
                   type="button"
+                  className={journeyStage === "deep" ? "current" : "upcoming"}
                   onClick={() => openRecords("deep")}
                 >
                   <i>3</i>
                   <span>
                     <strong>深度采访</strong>
-                    <small>查看采访录音与生成文章</small>
+                    <small>
+                      {journeyStage === "deep"
+                        ? "选择章节并开始采访"
+                        : "提纲生成后开始"}
+                    </small>
                   </span>
-                  <em>1 次</em>
+                  <em>{journeyStage === "deep" ? "进行中" : "待开始"}</em>
                 </button>
               </nav>
               <button
@@ -773,7 +804,8 @@ export default function Home() {
             <OutlineScreen
               chapters={initialChapters}
               version="v1"
-              onOpen={(chapter) => openChapter(chapter, "outline")}
+              onOpen={openChapter}
+              onContinue={() => openChapter(initialChapters[2])}
             />
           )}
 
@@ -781,7 +813,10 @@ export default function Home() {
             <ChapterScreen
               chapter={selectedChapter}
               onOpen={openModule}
-              onArticle={() => setScreen("article")}
+              onArticle={() => {
+                setArticleParentScreen("chapter");
+                setScreen("article");
+              }}
             />
           )}
 
@@ -794,7 +829,10 @@ export default function Home() {
                 setQuestionIndex(index);
                 setScreen("discovery");
               }}
-              onArticle={() => setScreen("article")}
+              onArticle={() => {
+                setArticleParentScreen("records");
+                setScreen("article");
+              }}
             />
           )}
 
@@ -815,7 +853,10 @@ export default function Home() {
               questionStates={questionStates}
               onTogglePause={() => setIsPaused((value) => !value)}
               onAdvance={advanceQuestion}
-              onFinish={() => setScreen("processing-article")}
+              onFinish={() => {
+                setArticleParentScreen("guide");
+                setScreen("processing-article");
+              }}
             />
           )}
 
@@ -846,7 +887,7 @@ export default function Home() {
           {screen === "updated" && (
             <UpdatedOutlineScreen
               chapters={updatedChapters}
-              onOpen={(chapter) => openChapter(chapter, "updated")}
+              onOpen={openChapter}
             />
           )}
         </div>
@@ -877,37 +918,36 @@ function HomeScreen({
             <strong>{biographyName}</strong>
           </span>
         </div>
-        <div className="intro-facts">
-          <span>
-            <strong>8 个</strong>
-            推荐问题
-          </span>
-          <span>
-            <strong>可跳过</strong>
-            不必全部回答
-          </span>
-          <span>
-            <strong>10—15 分钟</strong>
-            预计用时
-          </span>
-        </div>
       </div>
 
-      <div className="home-flow">
-        <span>
-          <i>1</i>
-          录音回答
-        </span>
-        <ChevronRight size={15} />
-        <span>
-          <i>2</i>
-          生成提纲
-        </span>
-        <ChevronRight size={15} />
-        <span>
-          <i>3</i>
-          深入采访
-        </span>
+      <div className="intro-explain home-intro-explain">
+        <div className="section-label">
+          <span>初步了解会怎样进行</span>
+          <small>预计 10—15 分钟</small>
+        </div>
+        <ol>
+          <li>
+            <span>1</span>
+            <p>
+              <strong>用录音回答推荐问题</strong>
+              <small>本人或协助采访的家人都可以回答。</small>
+            </p>
+          </li>
+          <li>
+            <span>2</span>
+            <p>
+              <strong>不清楚的问题可以跳过</strong>
+              <small>不必全部回答，也可以提前生成提纲。</small>
+            </p>
+          </li>
+          <li>
+            <span>3</span>
+            <p>
+              <strong>得到第一版完整采访提纲</strong>
+              <small>再按章节选择小节，逐次进行深入采访。</small>
+            </p>
+          </li>
+        </ol>
       </div>
 
       <button type="button" className="intro-start-button" onClick={onStart}>
@@ -1235,10 +1275,12 @@ function OutlineScreen({
   chapters,
   version,
   onOpen,
+  onContinue,
 }: {
   chapters: ChapterItem[];
   version: string;
   onOpen: (chapter: ChapterItem) => void;
+  onContinue: () => void;
 }) {
   const sectionCount = chapters.reduce(
     (total, chapter) => total + chapter.sections.length,
@@ -1276,7 +1318,9 @@ function OutlineScreen({
         {chapters.map((chapter) => (
           <button
             type="button"
-            className="chapter-card"
+            className={`chapter-card ${
+              chapter.id === "teaching" ? "featured" : ""
+            }`}
             onClick={() => onOpen(chapter)}
             key={chapter.id}
           >
@@ -1285,6 +1329,7 @@ function OutlineScreen({
               <span className="chapter-title-line">
                 <strong>{chapter.title}</strong>
                 <em>{chapter.period}</em>
+                {chapter.id === "teaching" && <mark>建议先采访</mark>}
               </span>
               <p>{chapter.summary}</p>
               <span className="chapter-section-preview">
@@ -1302,6 +1347,13 @@ function OutlineScreen({
             </span>
           </button>
         ))}
+      </div>
+
+      <div className="sticky-action outline-action">
+        <button className="primary-button" type="button" onClick={onContinue}>
+          选择章节，开始深度采访
+          <ArrowRight size={18} />
+        </button>
       </div>
     </div>
   );

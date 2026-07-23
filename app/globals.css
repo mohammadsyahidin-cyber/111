@@ -3099,6 +3099,454 @@ button:focus-visible {
   font-weight: 750;
 }
 
+.home-intro-explain {
+  margin-top: 15px;
+}
+
+.home-intro-explain li {
+  min-height: 58px;
+  padding: 9px 0;
+}
+
+.side-menu nav.side-progress > button.complete > i {
+  color: white;
+  border-color: #455b60;
+  background: #455b60;
+}
+
+.side-menu nav.side-progress > button.complete > em {
+  color: #33474b;
+  background: #e0eaeb;
+}
+
+.side-menu nav.side-progress > button.upcoming {
+  opacity: 0.62;
+}
+
+.outline-screen {
+  padding-bottom: 106px;
+}
+
+.outline-screen .screen-heading {
+  border-color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow:
+    0 17px 38px rgba(28, 26, 22, 0.15),
+    inset 4px 0 0 #8f5149;
+}
+
+.outline-screen .screen-heading .eyebrow {
+  color: #8a4d46;
+}
+
+.outline-screen .screen-heading h1 {
+  font-size: 29px;
+}
+
+.outline-screen .screen-heading p {
+  color: #5e5b54;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.outline-screen .outline-stats {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.outline-screen .outline-stats strong {
+  font-size: 21px;
+}
+
+.outline-screen .outline-stats div:nth-child(1) strong {
+  color: #8a4d46;
+}
+
+.outline-screen .outline-stats div:nth-child(2) strong {
+  color: #3f5b62;
+}
+
+.outline-screen .outline-stats div:nth-child(3) strong {
+  color: #8a6a37;
+}
+
+.outline-screen .outline-stats span {
+  color: #605c55;
+  font-size: 10px;
+}
+
+.outline-screen > .section-label > span {
+  font-size: 16px;
+}
+
+.outline-screen > .section-label small {
+  font-size: 10px;
+}
+
+.outline-screen .chapter-list {
+  gap: 12px;
+}
+
+.outline-screen .chapter-card {
+  grid-template-columns: 52px 1fr auto;
+  padding: 17px 16px;
+  border-color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 16px 36px rgba(28, 26, 22, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.outline-screen .chapter-card.featured {
+  border-color: rgba(143, 81, 73, 0.42);
+  box-shadow:
+    0 18px 40px rgba(48, 28, 25, 0.17),
+    inset 4px 0 0 #8f5149;
+}
+
+.outline-screen .chapter-order {
+  width: 50px;
+  padding: 8px 4px;
+  color: white;
+  border: 0;
+  background: #343533;
+  font-size: 12px;
+}
+
+.outline-screen .chapter-card:nth-child(2) .chapter-order {
+  background: #8f5149;
+}
+
+.outline-screen .chapter-card:nth-child(3) .chapter-order {
+  background: #3f5b62;
+}
+
+.outline-screen .chapter-card:nth-child(4) .chapter-order {
+  background: #9a7440;
+}
+
+.outline-screen .chapter-card:nth-child(5) .chapter-order {
+  background: #55504b;
+}
+
+.outline-screen .chapter-title-line {
+  gap: 7px;
+}
+
+.outline-screen .chapter-title-line strong {
+  color: #252522;
+  font-size: 19px;
+}
+
+.outline-screen .chapter-title-line em {
+  color: #716d65;
+  font-size: 10px;
+}
+
+.outline-screen .chapter-title-line mark {
+  padding: 3px 7px;
+  color: white;
+  border-radius: 999px;
+  background: #8f5149;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.outline-screen .chapter-main > p {
+  margin-top: 8px;
+  color: #5d5a54;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.outline-screen .chapter-section-preview {
+  margin-top: 13px;
+  gap: 8px;
+}
+
+.outline-screen .chapter-section-preview > span {
+  grid-template-columns: 20px 1fr;
+  color: #3f403d;
+  font-size: 12px;
+}
+
+.outline-screen .chapter-section-preview i {
+  width: 20px;
+  height: 20px;
+  color: #49555a;
+  background: #e8edef;
+  font-size: 9px;
+}
+
+.outline-screen .chapter-card:nth-child(2) .chapter-section-preview i {
+  color: #74433e;
+  background: #f1e4e2;
+}
+
+.outline-screen .chapter-card:nth-child(4) .chapter-section-preview i {
+  color: #75592f;
+  background: #f2e9d9;
+}
+
+.outline-screen .chapter-enter {
+  color: #55534d;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.updated-screen .update-summary {
+  border-color: rgba(255, 255, 255, 0.76);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow:
+    0 17px 38px rgba(28, 26, 22, 0.15),
+    inset 4px 0 0 #3f5b62;
+}
+
+.updated-screen .update-summary .eyebrow {
+  color: #3f5b62;
+}
+
+.updated-screen .update-summary h1 {
+  font-size: 25px;
+}
+
+.updated-screen .update-summary p {
+  color: #5d5a54;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.updated-screen .outline-change-legend {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.updated-screen .outline-change-legend span {
+  min-height: 46px;
+  color: #484640;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.updated-screen > .section-label > span {
+  font-size: 16px;
+}
+
+.updated-screen .chapter-list {
+  gap: 12px;
+}
+
+.updated-screen .chapter-card {
+  grid-template-columns: 52px 1fr auto;
+  padding: 17px 16px;
+  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.updated-screen .chapter-card.has-change {
+  border-color: rgba(143, 81, 73, 0.52);
+  background: rgba(255, 250, 248, 0.94);
+  box-shadow:
+    0 19px 42px rgba(56, 30, 26, 0.19),
+    inset 5px 0 0 #8f5149;
+}
+
+.updated-screen .chapter-order {
+  width: 50px;
+  padding: 8px 4px;
+  color: white;
+  border: 0;
+  background: #3f5b62;
+  font-size: 12px;
+}
+
+.updated-screen .chapter-card.has-change .chapter-order {
+  background: #8f5149;
+}
+
+.updated-screen .chapter-title-line strong {
+  color: #252522;
+  font-size: 18px;
+}
+
+.updated-screen .chapter-title-line em {
+  font-size: 10px;
+}
+
+.updated-screen .chapter-change-label {
+  width: fit-content;
+  margin-top: 10px;
+  padding: 5px 9px;
+  color: white;
+  border-radius: 999px;
+  background: #8f5149;
+  font-size: 9px;
+  box-shadow: 0 6px 14px rgba(83, 43, 38, 0.16);
+}
+
+.updated-screen .updated-section-lines {
+  margin-top: 13px;
+  gap: 7px;
+}
+
+.updated-screen .updated-section-lines > span {
+  min-height: 34px;
+  grid-template-columns: 21px minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 6px 7px;
+  border-left: 3px solid transparent;
+  border-radius: 5px;
+  background: #f3f4f2;
+  font-size: 11px;
+}
+
+.updated-screen .updated-section-lines > span > i {
+  width: 21px;
+  height: 21px;
+  color: #45585c;
+  background: #e0e9ea;
+  font-size: 9px;
+}
+
+.updated-screen .updated-section-lines b {
+  color: #373733;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.updated-screen .updated-section-lines > span.completed {
+  border-left-color: #3f5b62;
+  background: #e9eff0;
+}
+
+.updated-screen .updated-section-lines > span.new {
+  border-left-color: #a17b3f;
+  background: #f5ecdc;
+}
+
+.updated-screen .updated-section-lines > span.moved {
+  border-left-color: #8f5149;
+  background: #f3e5e2;
+}
+
+.updated-screen .updated-section-lines .completed b {
+  color: #30484d;
+}
+
+.updated-screen .updated-section-lines .new b {
+  color: #6f552d;
+}
+
+.updated-screen .updated-section-lines .moved b {
+  color: #70433e;
+}
+
+.updated-screen .updated-section-lines em {
+  padding: 3px 6px;
+  font-size: 8px;
+}
+
+/* Outline palette correction: hierarchy through type and spacing, not many colors. */
+.outline-screen .outline-stats div strong {
+  color: #2e2e2b;
+}
+
+.outline-screen .chapter-order,
+.outline-screen .chapter-card:nth-child(2) .chapter-order,
+.outline-screen .chapter-card:nth-child(3) .chapter-order,
+.outline-screen .chapter-card:nth-child(4) .chapter-order,
+.outline-screen .chapter-card:nth-child(5) .chapter-order {
+  background: #3b3b38;
+}
+
+.outline-screen .chapter-card.featured .chapter-order {
+  background: #8f5149;
+}
+
+.outline-screen .chapter-section-preview i,
+.outline-screen .chapter-card:nth-child(2) .chapter-section-preview i,
+.outline-screen .chapter-card:nth-child(4) .chapter-section-preview i {
+  color: #5f5e59;
+  background: #ececea;
+}
+
+.updated-screen .update-summary {
+  box-shadow:
+    0 17px 38px rgba(28, 26, 22, 0.15),
+    inset 4px 0 0 #8f5149;
+}
+
+.updated-screen .update-summary .eyebrow {
+  color: #8f5149;
+}
+
+.updated-screen .outline-change-legend i.done {
+  background: #3b3b38;
+}
+
+.updated-screen .outline-change-legend i.new {
+  background: #8f5149;
+}
+
+.updated-screen .outline-change-legend i.moved {
+  background: #8a8781;
+}
+
+.updated-screen .chapter-order {
+  background: #3b3b38;
+}
+
+.updated-screen .chapter-card.has-change .chapter-order {
+  background: #8f5149;
+}
+
+.updated-screen .updated-section-lines > span,
+.updated-screen .updated-section-lines > span.completed {
+  border-left-color: #4b4b47;
+  background: #eeeeec;
+}
+
+.updated-screen .updated-section-lines > span.new {
+  border-left-color: #8f5149;
+  background: #f4e8e6;
+}
+
+.updated-screen .updated-section-lines > span.moved {
+  border-left-color: #8a8781;
+  background: #f1f0ed;
+}
+
+.updated-screen .updated-section-lines > span > i {
+  color: #5b5a55;
+  background: #e2e2df;
+}
+
+.updated-screen .updated-section-lines .completed b {
+  color: #3d3d39;
+}
+
+.updated-screen .updated-section-lines .new b {
+  color: #74443f;
+}
+
+.updated-screen .updated-section-lines .moved b {
+  color: #605d57;
+}
+
+.updated-screen .updated-section-lines .completed em {
+  color: white;
+  background: #4b4b47;
+}
+
+.updated-screen .updated-section-lines .new em {
+  color: white;
+  background: #8f5149;
+}
+
+.updated-screen .updated-section-lines .moved em {
+  color: #55524d;
+  background: #deddd9;
+}
+
 @media (max-height: 720px) and (min-width: 821px) {
   .device-shell {
     height: calc(100vh - 20px);
