@@ -228,6 +228,7 @@ export default function Home() {
   }, [screen]);
 
   const currentAnswer = answers[questionIndex];
+  const answeredCount = answers.filter(Boolean).length;
   const navTitle =
     screen === "discovery" || screen === "processing-outline"
       ? "初始采访"
@@ -269,6 +270,21 @@ export default function Home() {
       setIsDiscoveryRecording(false);
       return;
     }
+    setScreen("processing-outline");
+  }
+
+  function skipDiscoveryQuestion() {
+    if (questionIndex < discoveryQuestions.length - 1) {
+      setQuestionIndex((value) => value + 1);
+      setDiscoverySeconds(0);
+      setIsDiscoveryRecording(false);
+      return;
+    }
+    setScreen("processing-outline");
+  }
+
+  function generateOutlineEarly() {
+    setIsDiscoveryRecording(false);
     setScreen("processing-outline");
   }
 
@@ -346,6 +362,15 @@ export default function Home() {
     !screen.startsWith("processing") &&
     !(screen === "discovery" && questionIndex === 0);
 
+  const backdropClass =
+    screen === "discovery" || screen === "processing-outline"
+      ? "backdrop-archive"
+      : screen === "outline" || screen === "updated"
+        ? "backdrop-school"
+        : screen === "guide" || screen === "recording"
+          ? "backdrop-voice"
+          : "backdrop-book";
+
   return (
     <main className="prototype-stage">
       <section className="device-shell" aria-label="山顶传记交互原型">
@@ -406,16 +431,19 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="screen-content">
+        <div className={`screen-content ${backdropClass}`}>
           {screen === "discovery" && (
             <DiscoveryScreen
               questionIndex={questionIndex}
+              answeredCount={answeredCount}
               currentAnswer={currentAnswer}
               isRecording={isDiscoveryRecording}
               seconds={discoverySeconds}
               onToggleRecording={toggleDiscoveryRecording}
               onResetRecording={resetDiscoveryRecording}
               onNext={nextDiscoveryQuestion}
+              onSkip={skipDiscoveryQuestion}
+              onGenerate={generateOutlineEarly}
             />
           )}
 
@@ -499,20 +527,26 @@ export default function Home() {
 
 function DiscoveryScreen({
   questionIndex,
+  answeredCount,
   currentAnswer,
   isRecording,
   seconds,
   onToggleRecording,
   onResetRecording,
   onNext,
+  onSkip,
+  onGenerate,
 }: {
   questionIndex: number;
+  answeredCount: number;
   currentAnswer?: string;
   isRecording: boolean;
   seconds: number;
   onToggleRecording: () => void;
   onResetRecording: () => void;
   onNext: () => void;
+  onSkip: () => void;
+  onGenerate: () => void;
 }) {
   const question = discoveryQuestions[questionIndex];
   return (
@@ -520,18 +554,26 @@ function DiscoveryScreen({
       {questionIndex === 0 && (
         <div className="discovery-intro">
           <div>
-            <img src="/shanding-logo.png" alt="" width={34} height={34} />
+            <span className="intro-mark">
+              <Mic size={18} />
+            </span>
             <span>先简单聊聊这一生</span>
           </div>
-          <p>共 8 个固定问题，全部通过录音回答，预计 15—20 分钟。</p>
+          <p>8 个推荐问题都用录音回答，可以跳过；信息足够时可提前生成提纲。</p>
         </div>
       )}
 
-      <div className="progress-label discovery-progress">
-        <span>
-          问题 {questionIndex + 1} / {discoveryQuestions.length}
-        </span>
-        <strong>约剩 {Math.max(2, 16 - questionIndex * 2)} 分钟</strong>
+      <div className="discovery-toolbar">
+        <div className="progress-label discovery-progress">
+          <span>
+            问题 {questionIndex + 1} / {discoveryQuestions.length}
+          </span>
+          <strong>已回答 {answeredCount} 题</strong>
+        </div>
+        <button type="button" className="skip-bubble" onClick={onSkip}>
+          <SkipForward size={15} />
+          {questionIndex === discoveryQuestions.length - 1 ? "跳过并生成" : "跳过"}
+        </button>
       </div>
       <div className="progress-track">
         <span
@@ -599,6 +641,15 @@ function DiscoveryScreen({
       )}
 
       <div className="sticky-action">
+        {answeredCount >= 3 && questionIndex < discoveryQuestions.length - 1 && (
+          <button
+            className="early-generate-button"
+            type="button"
+            onClick={onGenerate}
+          >
+            已回答 {answeredCount} 题，直接生成提纲
+          </button>
+        )}
         <button
           className="primary-button"
           type="button"

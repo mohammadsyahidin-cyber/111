@@ -1576,3 +1576,537 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* 2026 visual refresh: restrained editorial palette, photographic depth and bubble actions. */
+:root {
+  --paper: #fbfaf7;
+  --canvas: #deddd8;
+  --soft: rgba(249, 248, 244, 0.82);
+  --line: rgba(46, 44, 40, 0.13);
+  --ink: #1d1c1a;
+  --muted: #6f6c66;
+  --primary: #252522;
+  --primary-dark: #11110f;
+  --green: #5f5c55;
+  --green-soft: rgba(242, 240, 234, 0.92);
+  --gold: #a8864f;
+  --gold-soft: rgba(245, 238, 224, 0.94);
+  --red-soft: rgba(247, 231, 227, 0.94);
+  --record: #9b4b43;
+  --shadow: 0 28px 80px rgba(30, 28, 24, 0.2);
+}
+
+body {
+  background: #deddd8;
+}
+
+button:focus-visible {
+  outline-color: rgba(37, 37, 34, 0.28);
+}
+
+.prototype-stage {
+  background: #deddd8;
+}
+
+.device-shell {
+  border-color: rgba(35, 34, 31, 0.16);
+  border-radius: 30px;
+  background: var(--paper);
+  box-shadow:
+    0 34px 90px rgba(29, 28, 25, 0.22),
+    0 3px 10px rgba(29, 28, 25, 0.1);
+}
+
+.status-bar {
+  background: rgba(251, 250, 247, 0.9);
+  backdrop-filter: blur(18px);
+}
+
+.app-header {
+  border-bottom-color: rgba(42, 40, 36, 0.1);
+  background: rgba(251, 250, 247, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.mini-program-capsule {
+  border-color: rgba(34, 33, 30, 0.14);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 7px 18px rgba(28, 27, 24, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.prototype-menu {
+  border-color: rgba(36, 34, 30, 0.12);
+  border-radius: 14px;
+  background: rgba(251, 250, 247, 0.96);
+  box-shadow: 0 18px 42px rgba(27, 26, 23, 0.18);
+  backdrop-filter: blur(20px);
+}
+
+.prototype-menu button {
+  border-radius: 10px;
+}
+
+.screen-content {
+  background-color: rgba(238, 235, 228, 0.28);
+  background-image: url("/memory-background-atlas.png");
+  background-repeat: no-repeat;
+  background-size: 400% auto;
+  background-attachment: local;
+  transition: background-position 320ms ease;
+}
+
+.screen-content.backdrop-archive {
+  background-position: 0% center;
+}
+
+.screen-content.backdrop-school {
+  background-position: 33.333% center;
+}
+
+.screen-content.backdrop-voice {
+  background-position: 66.666% center;
+}
+
+.screen-content.backdrop-book {
+  background-position: 100% center;
+}
+
+.screen {
+  background: rgba(247, 245, 240, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.discovery-screen,
+.article-screen {
+  background: rgba(247, 245, 240, 0.68);
+}
+
+.discovery-intro {
+  margin: -12px 0 18px;
+  padding: 15px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 8px;
+  background: rgba(252, 251, 247, 0.78);
+  box-shadow:
+    0 14px 32px rgba(29, 27, 23, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(18px);
+}
+
+.discovery-intro > div {
+  gap: 11px;
+}
+
+.intro-mark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow:
+    0 8px 18px rgba(25, 25, 22, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.discovery-intro p {
+  margin: 9px 0 0 47px;
+  color: #65625c;
+  font-size: 11px;
+}
+
+.discovery-toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.discovery-progress {
+  display: grid;
+  gap: 3px;
+}
+
+.skip-bubble,
+.early-generate-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  background: rgba(253, 252, 249, 0.84);
+  box-shadow:
+    0 9px 22px rgba(29, 27, 23, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    inset 0 -2px 0 rgba(35, 33, 29, 0.06);
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+}
+
+.skip-bubble {
+  min-height: 36px;
+  padding: 0 13px;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.early-generate-button {
+  width: 100%;
+  min-height: 38px;
+  margin-bottom: 9px;
+  color: #49463f;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.skip-bubble:active,
+.early-generate-button:active,
+.primary-button:active,
+.finish-recording:active,
+.question-actions button:active {
+  transform: translateY(1px);
+}
+
+.progress-track {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.54);
+  box-shadow: inset 0 1px 2px rgba(33, 31, 27, 0.12);
+}
+
+.progress-track span {
+  background: var(--primary);
+}
+
+.screen-heading {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 8px;
+  background: rgba(252, 251, 248, 0.76);
+  box-shadow:
+    0 14px 34px rgba(28, 26, 22, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.discovery-screen .screen-heading {
+  margin-top: 18px;
+}
+
+.discovery-screen .screen-heading h1 {
+  font-size: 24px;
+}
+
+.screen-heading.compact {
+  margin-top: 0;
+}
+
+.discovery-recorder {
+  margin-top: 22px;
+  padding: 22px 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 8px;
+  background: rgba(251, 250, 247, 0.72);
+  box-shadow: 0 16px 36px rgba(28, 26, 22, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.discovery-wave i {
+  background: rgba(57, 54, 48, 0.28);
+}
+
+.discovery-recorder.is-recording .discovery-wave i {
+  background: var(--record);
+}
+
+.discovery-mic {
+  background: var(--record);
+  box-shadow:
+    0 12px 26px rgba(99, 46, 42, 0.25),
+    0 0 0 9px rgba(247, 231, 227, 0.74),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -3px 0 rgba(71, 29, 25, 0.18);
+}
+
+.discovery-mic.stop {
+  background: var(--primary);
+  box-shadow:
+    0 12px 26px rgba(29, 28, 25, 0.22),
+    0 0 0 9px rgba(255, 255, 255, 0.56),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.discovery-transcript {
+  border-color: rgba(255, 255, 255, 0.62);
+  background: rgba(252, 251, 247, 0.84);
+  box-shadow: 0 16px 36px rgba(28, 26, 22, 0.13);
+  backdrop-filter: blur(18px);
+}
+
+.transcript-head > span,
+.discovery-transcript > button {
+  color: #4b4943;
+}
+
+.sticky-action,
+.recording-controls {
+  border-top-color: rgba(36, 34, 30, 0.1);
+  background: rgba(250, 249, 245, 0.84);
+  box-shadow: 0 -10px 28px rgba(30, 28, 24, 0.08);
+  backdrop-filter: blur(22px);
+}
+
+.primary-button,
+.record-button,
+.finish-recording {
+  min-height: 50px;
+  color: white;
+  border: 1px solid rgba(20, 20, 18, 0.18);
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow:
+    0 13px 28px rgba(27, 26, 23, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.primary-button:hover,
+.record-button:hover,
+.finish-recording:hover {
+  background: var(--primary-dark);
+}
+
+.primary-button:disabled {
+  color: #9b9891;
+  border-color: rgba(40, 38, 34, 0.06);
+  background: rgba(229, 227, 221, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -2px 0 rgba(40, 38, 34, 0.04);
+}
+
+.processing-screen {
+  background: rgba(244, 241, 234, 0.54);
+}
+
+.processing-screen h1,
+.processing-screen p {
+  padding-left: 14px;
+  padding-right: 14px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.processing-mark {
+  color: var(--ink);
+  border-color: rgba(255, 255, 255, 0.56);
+  background: rgba(251, 250, 247, 0.66);
+  box-shadow: 0 20px 42px rgba(27, 26, 23, 0.17);
+  backdrop-filter: blur(16px);
+}
+
+.processing-mark > span {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.processing-mark i {
+  background: var(--gold);
+}
+
+.processing-lines span {
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: inset 0 1px 2px rgba(32, 30, 27, 0.09);
+}
+
+.outline-stats,
+.change-strip {
+  margin-left: 0;
+  margin-right: 0;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  background: rgba(251, 250, 247, 0.76);
+  box-shadow: 0 13px 30px rgba(28, 26, 22, 0.11);
+  backdrop-filter: blur(18px);
+}
+
+.module-list,
+.question-preview-list,
+.mini-question-list {
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  border-radius: 8px;
+  box-shadow: 0 16px 36px rgba(28, 26, 22, 0.13);
+  backdrop-filter: blur(18px);
+}
+
+.module-row,
+.question-preview-list li,
+.mini-question-list button {
+  background: rgba(251, 250, 247, 0.82);
+}
+
+.module-row:hover,
+.mini-question-list button.active {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.module-index,
+.module-index.green,
+.module-index.red {
+  color: #35332e;
+  background: rgba(235, 232, 224, 0.95);
+}
+
+.module-index.gold {
+  color: #7b6035;
+  background: var(--gold-soft);
+}
+
+.module-title-line em,
+.module-title-line em.done {
+  color: #44413a;
+  border-color: rgba(66, 61, 52, 0.18);
+  background: rgba(239, 236, 228, 0.94);
+}
+
+.topic-band {
+  margin: -8px 0 0;
+  padding: 24px 20px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(31, 31, 28, 0.88);
+  box-shadow: 0 18px 38px rgba(21, 20, 18, 0.22);
+  backdrop-filter: blur(14px);
+}
+
+.topic-band .eyebrow,
+.topic-meta {
+  color: #ded8cc;
+}
+
+.interview-tip,
+.optional-toggle,
+.optional-questions,
+.current-question,
+.fact-check,
+.fact-check.confirmed {
+  border-color: rgba(255, 255, 255, 0.58);
+  background: rgba(250, 247, 239, 0.82);
+  box-shadow: 0 12px 28px rgba(28, 26, 22, 0.11);
+  backdrop-filter: blur(18px);
+}
+
+.question-preview-list li > span {
+  color: #403d37;
+  background: rgba(232, 229, 221, 0.96);
+}
+
+.optional-toggle {
+  border-radius: 999px;
+  box-shadow:
+    0 10px 24px rgba(29, 27, 23, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.recording-status,
+.timer {
+  color: #24231f;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.live-dot {
+  background: var(--record);
+}
+
+.waveform i {
+  background: var(--record);
+}
+
+.current-question {
+  background: rgba(251, 250, 247, 0.86);
+}
+
+.question-position {
+  color: #4a4740;
+}
+
+.question-actions button {
+  border: 1px solid rgba(43, 41, 37, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 8px 18px rgba(28, 26, 22, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.question-actions .question-done {
+  color: white;
+  border-color: rgba(25, 25, 22, 0.16);
+  background: var(--primary);
+  box-shadow:
+    0 9px 20px rgba(26, 25, 22, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18);
+}
+
+.mini-question-list button > svg,
+.article-complete {
+  color: #4e4b44;
+}
+
+.round-control {
+  border-color: rgba(36, 34, 30, 0.1);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 9px 20px rgba(28, 26, 22, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.article-screen article {
+  border-color: rgba(255, 255, 255, 0.56);
+  background: rgba(252, 251, 248, 0.9);
+  box-shadow: 0 20px 46px rgba(27, 25, 21, 0.16);
+  backdrop-filter: blur(18px);
+}
+
+.article-body blockquote {
+  color: #6d5634;
+  border-left-color: var(--gold);
+}
+
+.fact-check button {
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow:
+    0 8px 18px rgba(26, 25, 22, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.update-summary {
+  padding: 17px;
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 8px;
+  background: rgba(251, 250, 247, 0.78);
+  box-shadow: 0 15px 34px rgba(28, 26, 22, 0.13);
+  backdrop-filter: blur(18px);
+}
+
+.update-icon {
+  border-radius: 50%;
+  background: var(--gold-soft);
+  box-shadow: 0 8px 18px rgba(75, 58, 31, 0.12);
+}
+
+@media (max-width: 820px) {
+  .prototype-stage {
+    background: var(--paper);
+  }
+
+  .device-shell {
+    border-radius: 0;
+  }
+}

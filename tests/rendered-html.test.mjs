@@ -58,13 +58,16 @@ test("contains the complete clickable interview journey", async () => {
   }
 
   assert.match(page, /生成初始提纲/);
-  assert.match(page, /全部通过录音回答/);
+  assert.match(page, /可以跳过/);
+  assert.match(page, /直接生成提纲/);
+  assert.match(page, /skipDiscoveryQuestion/);
   assert.match(page, /toggleDiscoveryRecording/);
   assert.match(page, /开始采访并录音/);
   assert.match(page, /保存文章并更新提纲/);
   assert.match(page, /采访提纲已更新为 v2/);
   assert.match(page, /setInterval/);
   assert.match(layout, /lang="zh-CN"/);
+  assert.doesNotMatch(layout, /shanding-logo/);
   assert.match(packageJson, /"lucide-react"/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 
