@@ -37,6 +37,7 @@ type Screen =
   | "processing-outline"
   | "outline"
   | "chapter"
+  | "records"
   | "guide"
   | "recording"
   | "processing-article"
@@ -317,6 +318,9 @@ export default function Home() {
   const [chapterReturnScreen, setChapterReturnScreen] = useState<
     "outline" | "updated"
   >("outline");
+  const [recordView, setRecordView] = useState<"discovery" | "deep">(
+    "discovery",
+  );
   const [seconds, setSeconds] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [activeInterviewQuestion, setActiveInterviewQuestion] = useState(0);
@@ -370,6 +374,8 @@ export default function Home() {
       ? "初步了解"
       : screen === "outline" || screen === "updated" || screen === "chapter"
         ? "采访提纲"
+        : screen === "records"
+          ? "采访记录"
         : screen === "guide" || screen === "recording"
           ? "故事采访"
           : "故事文章";
@@ -482,6 +488,10 @@ export default function Home() {
       setScreen(chapterReturnScreen);
       return;
     }
+    if (screen === "records") {
+      setScreen("home");
+      return;
+    }
     if (screen === "guide") {
       setScreen("chapter");
       return;
@@ -515,6 +525,12 @@ export default function Home() {
     setScreen(nextScreen);
   }
 
+  function openRecords(view: "discovery" | "deep") {
+    setRecordView(view);
+    setShowSideMenu(false);
+    setScreen("records");
+  }
+
   function createBiography() {
     const nextName = newBiographyName.trim();
     if (nextName) setBiographyName(nextName);
@@ -531,7 +547,10 @@ export default function Home() {
     screen === "discovery" ||
     screen === "processing-outline"
       ? "backdrop-archive"
-      : screen === "outline" || screen === "updated" || screen === "chapter"
+      : screen === "outline" ||
+          screen === "updated" ||
+          screen === "chapter" ||
+          screen === "records"
         ? "backdrop-school"
         : screen === "guide" || screen === "recording"
           ? "backdrop-voice"
@@ -620,32 +639,44 @@ export default function Home() {
                   <X size={19} />
                 </button>
               </div>
-              <nav>
+              <div className="side-progress-title">
+                <span>传记进度</span>
+                <small>点击阶段查看相关记录</small>
+              </div>
+              <nav className="side-progress">
                 <button
                   type="button"
-                  className={screen === "home" || screen === "discovery" ? "active" : ""}
-                  onClick={() => navigateFromSideMenu("home")}
+                  className="current"
+                  onClick={() => openRecords("discovery")}
                 >
-                  <Mic size={18} />
+                  <i>1</i>
                   <span>
                     <strong>初步了解</strong>
-                    <small>回答基础问题，生成首版提纲</small>
+                    <small>{answeredCount}/8 个问题已回答</small>
                   </span>
-                  <ChevronRight size={17} />
+                  <em>进行中</em>
                 </button>
                 <button
                   type="button"
-                  className={
-                    screen === "outline" || screen === "chapter" ? "active" : ""
-                  }
                   onClick={() => navigateFromSideMenu("outline")}
                 >
-                  <ListChecks size={18} />
+                  <i>2</i>
                   <span>
-                    <strong>完整采访提纲</strong>
-                    <small>查看章节、小节与采访进度</small>
+                    <strong>提纲生成</strong>
+                    <small>5 章 · 11 个采访小节</small>
                   </span>
-                  <ChevronRight size={17} />
+                  <em>v1</em>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openRecords("deep")}
+                >
+                  <i>3</i>
+                  <span>
+                    <strong>深度采访</strong>
+                    <small>查看采访录音与生成文章</small>
+                  </span>
+                  <em>1 次</em>
                 </button>
               </nav>
               <button
@@ -754,6 +785,19 @@ export default function Home() {
             />
           )}
 
+          {screen === "records" && (
+            <RecordsScreen
+              view={recordView}
+              answers={answers}
+              onChangeView={setRecordView}
+              onResume={(index) => {
+                setQuestionIndex(index);
+                setScreen("discovery");
+              }}
+              onArticle={() => setScreen("article")}
+            />
+          )}
+
           {screen === "guide" && (
             <GuideScreen
               module={selectedModule}
@@ -820,18 +864,11 @@ function HomeScreen({
 }) {
   return (
     <div className="screen home-screen">
-      <div className="intro-step">
-        <span>第一步</span>
-        <small>建立对 {biographyName} 人生经历的基本了解</small>
-      </div>
-
       <div className="intro-hero">
-        <span className="intro-hero-mark">
-          <Mic size={23} />
-        </span>
-        <h1>先做一次初步了解</h1>
+        <span className="eyebrow">第一步 · 初步了解</span>
+        <h1>先认识这段人生，再开始深入采访</h1>
         <p>
-          这不是正式的深入采访。先通过几个基础问题，了解重要的人生阶段、人物和故事线索。
+          通过几个录音问题，了解重要的人生阶段、人物和故事线索，并生成第一版采访提纲。
         </p>
         <div className="intro-person">
           <img src="/lin-xiulan-teacher.png" alt={`${biographyName}的传记`} />
@@ -840,47 +877,187 @@ function HomeScreen({
             <strong>{biographyName}</strong>
           </span>
         </div>
-      </div>
-
-      <div className="intro-explain">
-        <div className="section-label">
-          <span>这个环节会怎样进行</span>
-          <small>预计 10—15 分钟</small>
+        <div className="intro-facts">
+          <span>
+            <strong>8 个</strong>
+            推荐问题
+          </span>
+          <span>
+            <strong>可跳过</strong>
+            不必全部回答
+          </span>
+          <span>
+            <strong>10—15 分钟</strong>
+            预计用时
+          </span>
         </div>
-        <ol>
-          <li>
-            <span>1</span>
-            <p>
-              <strong>用录音回答 8 个推荐问题</strong>
-              <small>本人或协助采访的家人都可以回答。</small>
-            </p>
-          </li>
-          <li>
-            <span>2</span>
-            <p>
-              <strong>不清楚的问题可以跳过</strong>
-              <small>信息足够时，也可以提前结束这个环节。</small>
-            </p>
-          </li>
-          <li>
-            <span>3</span>
-            <p>
-              <strong>生成第一版完整采访提纲</strong>
-              <small>之后再按章节选择具体小节，一点点深入采访。</small>
-            </p>
-          </li>
-        </ol>
       </div>
 
-      <div className="intro-note">
-        <Lightbulb size={17} />
-        <p>不用一次说得完整，也不用严格按时间顺序。先说记得最清楚的部分即可。</p>
+      <div className="home-flow">
+        <span>
+          <i>1</i>
+          录音回答
+        </span>
+        <ChevronRight size={15} />
+        <span>
+          <i>2</i>
+          生成提纲
+        </span>
+        <ChevronRight size={15} />
+        <span>
+          <i>3</i>
+          深入采访
+        </span>
       </div>
 
       <button type="button" className="intro-start-button" onClick={onStart}>
         开始初步了解
         <ArrowRight size={18} />
       </button>
+    </div>
+  );
+}
+
+function RecordsScreen({
+  view,
+  answers,
+  onChangeView,
+  onResume,
+  onArticle,
+}: {
+  view: "discovery" | "deep";
+  answers: string[];
+  onChangeView: (view: "discovery" | "deep") => void;
+  onResume: (index: number) => void;
+  onArticle: () => void;
+}) {
+  const completedAnswers = discoveryQuestions
+    .map((question, index) => ({
+      ...question,
+      index,
+      answer: answers[index],
+    }))
+    .filter((item) => item.answer);
+
+  return (
+    <div className="screen records-screen">
+      <div className="records-heading">
+        <span className="eyebrow">采访记录</span>
+        <h1>每一次谈话都保留在这里</h1>
+        <p>可以回听录音、查看文字记录，也可以从未完成的位置继续。</p>
+      </div>
+
+      <div className="records-tabs">
+        <button
+          type="button"
+          className={view === "discovery" ? "active" : ""}
+          onClick={() => onChangeView("discovery")}
+        >
+          初步了解
+        </button>
+        <button
+          type="button"
+          className={view === "deep" ? "active" : ""}
+          onClick={() => onChangeView("deep")}
+        >
+          深度采访
+        </button>
+      </div>
+
+      {view === "discovery" && (
+        <>
+          <div className="records-summary">
+            <span>
+              <strong>{completedAnswers.length}</strong>
+              <small>已回答</small>
+            </span>
+            <i />
+            <span>
+              <strong>{8 - completedAnswers.length}</strong>
+              <small>待了解</small>
+            </span>
+            <i />
+            <span>
+              <strong>约 {completedAnswers.length * 2} 分钟</strong>
+              <small>录音总时长</small>
+            </span>
+          </div>
+
+          {completedAnswers.length > 0 ? (
+            <div className="record-list">
+              {completedAnswers.map((item) => (
+                <button
+                  type="button"
+                  key={item.question}
+                  onClick={() => onResume(item.index)}
+                >
+                  <span className="record-play">
+                    <Play size={15} fill="currentColor" />
+                  </span>
+                  <span>
+                    <strong>{item.question}</strong>
+                    <small>录音 01:{18 + item.index * 3} · 已转成文字</small>
+                    <p>{item.answer}</p>
+                  </span>
+                  <ChevronRight size={17} />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="records-empty">
+              <span>
+                <Mic size={22} />
+              </span>
+              <strong>还没有初步了解记录</strong>
+              <p>开始回答第一个问题后，录音和文字会自动保存在这里。</p>
+              <button type="button" onClick={() => onResume(0)}>
+                开始第一个问题
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {view === "deep" && (
+        <div className="deep-records">
+          <div className="records-summary">
+            <span>
+              <strong>1</strong>
+              <small>次采访</small>
+            </span>
+            <i />
+            <span>
+              <strong>32 分钟</strong>
+              <small>录音时长</small>
+            </span>
+            <i />
+            <span>
+              <strong>1</strong>
+              <small>篇文章</small>
+            </span>
+          </div>
+
+          <button type="button" className="deep-record-card" onClick={onArticle}>
+            <div className="deep-record-top">
+              <span>第三章 · 四十年乡村讲台</span>
+              <em>已成文</em>
+            </div>
+            <h2>第一次走进乡村教室</h2>
+            <p>2026 年 7 月 22 日 · 32:18 · 子女协助采访</p>
+            <div>
+              <span>
+                <Play size={15} fill="currentColor" />
+                回听录音
+              </span>
+              <span>
+                查看文章
+                <ChevronRight size={16} />
+              </span>
+            </div>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

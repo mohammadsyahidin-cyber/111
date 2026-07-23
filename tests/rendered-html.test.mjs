@@ -33,7 +33,7 @@ test("server-renders the biography interview prototype", async () => {
   const html = await response.text();
   assert.match(html, /<title>山顶传记 · 子女协助采访原型<\/title>/i);
   assert.match(html, /本次记录对象/);
-  assert.match(html, /先做一次初步了解/);
+  assert.match(html, /先认识这段人生/);
   assert.match(html, /开始初步了解/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
@@ -50,6 +50,7 @@ test("contains the complete clickable interview journey", async () => {
     "discovery",
     "outline",
     "chapter",
+    "records",
     "guide",
     "recording",
     "article",
@@ -61,6 +62,9 @@ test("contains the complete clickable interview journey", async () => {
   assert.match(page, /生成初始提纲/);
   assert.match(page, /完整采访提纲/);
   assert.match(page, /新建传记/);
+  assert.match(page, /传记进度/);
+  assert.match(page, /每一次谈话都保留在这里/);
+  assert.match(page, /查看采访录音与生成文章/);
   assert.doesNotMatch(page, /小青建议/);
   assert.doesNotMatch(page, /摸底/);
   assert.match(page, /一级章节/);
