@@ -4318,6 +4318,850 @@ button:focus-visible {
   }
 }
 
+/* Mobile readability and clearer hierarchy. */
+.app-title {
+  font-size: 15px;
+}
+
+.discovery-intro span {
+  font-size: 16px;
+}
+
+.discovery-intro p {
+  margin-left: 47px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.discovery-progress span,
+.discovery-progress strong {
+  font-size: 12px;
+}
+
+.skip-bubble {
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: 12px;
+}
+
+.discovery-screen .screen-heading {
+  padding: 20px 18px;
+}
+
+.discovery-screen .screen-heading h1 {
+  font-size: 27px;
+  line-height: 1.38;
+}
+
+.discovery-screen .screen-heading p {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.discovery-time {
+  font-size: 14px;
+}
+
+.discovery-mic {
+  width: 58px;
+  height: 58px;
+  margin-top: 16px;
+  box-shadow:
+    0 10px 22px rgba(99, 46, 42, 0.22),
+    0 0 0 6px rgba(247, 231, 227, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 0 rgba(71, 29, 25, 0.17);
+}
+
+.discovery-mic.stop {
+  box-shadow:
+    0 10px 22px rgba(29, 28, 25, 0.2),
+    0 0 0 6px rgba(255, 255, 255, 0.56),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.discovery-recorder > strong {
+  margin-top: 15px;
+  font-size: 15px;
+}
+
+.discovery-recorder > small {
+  font-size: 12px;
+}
+
+.transcript-head > span {
+  font-size: 13px;
+}
+
+.transcript-head small {
+  font-size: 12px;
+}
+
+.discovery-transcript {
+  padding: 18px;
+}
+
+.discovery-transcript p {
+  margin-top: 15px;
+  color: #373632;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.discovery-transcript > button {
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.early-generate-button {
+  min-height: 40px;
+  font-size: 12px;
+}
+
+.primary-button {
+  font-size: 14px;
+}
+
+.records-heading h1 {
+  font-size: 26px;
+}
+
+.records-heading p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.records-tabs button {
+  min-height: 40px;
+  font-size: 13px;
+}
+
+.records-summary strong {
+  font-size: 16px;
+}
+
+.records-summary small {
+  font-size: 10px;
+}
+
+.record-list > button {
+  grid-template-columns: 38px 1fr;
+  gap: 12px;
+  padding: 16px;
+}
+
+.record-play {
+  width: 37px;
+  height: 37px;
+}
+
+.record-list strong {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.record-list small {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.record-list p {
+  margin-top: 9px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.record-list > button > svg {
+  display: none;
+}
+
+.records-empty > strong {
+  font-size: 15px;
+}
+
+.records-empty > p,
+.records-empty > button {
+  font-size: 12px;
+}
+
+/* A small switch action replaces the oversized side-menu close control. */
+.side-menu-head {
+  display: block;
+}
+
+.side-menu-head > div {
+  width: 100%;
+}
+
+.side-menu-head > div > span {
+  font-size: 11px;
+}
+
+.side-biography-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.side-biography-title strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-biography-title button {
+  min-height: 27px;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  padding: 0 9px;
+  color: #5f5b54;
+  border: 1px solid rgba(42, 40, 36, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.side-menu nav strong {
+  font-size: 14px;
+}
+
+.side-menu nav small {
+  font-size: 11px;
+}
+
+.side-menu nav.side-progress > button > em {
+  font-size: 9px;
+}
+
+.biography-switcher-backdrop {
+  position: absolute;
+  z-index: 43;
+  inset: 0;
+  border: 0;
+  background: rgba(22, 21, 19, 0.36);
+  backdrop-filter: blur(2px);
+}
+
+.biography-switcher {
+  position: absolute;
+  z-index: 44;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  padding: 19px;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 18px;
+  background: rgba(252, 251, 248, 0.97);
+  box-shadow: 0 26px 70px rgba(25, 24, 21, 0.3);
+  backdrop-filter: blur(24px);
+}
+
+.biography-switcher-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.biography-switcher-head .eyebrow {
+  color: #767169;
+  font-size: 10px;
+}
+
+.biography-switcher-head h2 {
+  margin: 6px 0 0;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 22px;
+}
+
+.biography-switcher-head > button {
+  padding: 5px 2px;
+  color: #6d6962;
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+}
+
+.biography-switcher-list {
+  display: grid;
+  gap: 9px;
+  margin-top: 17px;
+}
+
+.biography-switcher-list > button {
+  min-height: 59px;
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  gap: 11px;
+  align-items: center;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid rgba(43, 41, 37, 0.1);
+  border-radius: 10px;
+  background: #f5f3ee;
+}
+
+.biography-switcher-list > button.active {
+  border-color: rgba(47, 46, 42, 0.34);
+  background: white;
+  box-shadow: inset 3px 0 0 #3b3a36;
+}
+
+.biography-switcher-list > button > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: white;
+  border-radius: 50%;
+  background: #5f5b55;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 16px;
+}
+
+.biography-switcher-list strong {
+  font-size: 13px;
+}
+
+.biography-switcher-list em,
+.biography-switcher-list small {
+  color: #6f6b64;
+  font-size: 10px;
+  font-style: normal;
+}
+
+.switcher-new-biography {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 12px;
+  color: #373632;
+  border: 1px solid rgba(43, 41, 37, 0.13);
+  border-radius: 999px;
+  background: white;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+/* Create screen is a first-use task, not a marketing landing page. */
+.create-biography-card {
+  min-height: 600px;
+  padding: 26px 22px 22px;
+}
+
+.create-biography-mark {
+  width: 58px;
+  height: 58px;
+}
+
+.create-biography-card > .eyebrow {
+  font-size: 12px;
+}
+
+.create-biography-card > h1 {
+  font-size: 34px;
+}
+
+.create-biography-card > p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.create-flow-hint {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr auto;
+  gap: 7px;
+  align-items: center;
+  margin-top: 20px;
+  color: #736f68;
+  font-size: 10px;
+}
+
+.create-flow-hint span {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
+
+.create-flow-hint i {
+  width: 19px;
+  height: 19px;
+  display: grid;
+  place-items: center;
+  color: white;
+  border-radius: 50%;
+  background: #4d4b46;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.create-flow-hint b {
+  height: 1px;
+  background: #d6d2cb;
+}
+
+.create-biography-form {
+  margin-top: 22px;
+}
+
+.create-biography-form label {
+  font-size: 12px;
+}
+
+.create-biography-form input,
+.create-biography-form select {
+  height: 50px;
+  font-size: 14px;
+}
+
+.create-biography-submit {
+  font-size: 14px;
+}
+
+/* Outline chapters are selected first and opened only from the bottom action. */
+.outline-screen .chapter-card {
+  grid-template-columns: 52px 1fr 24px;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.outline-screen .chapter-card.featured {
+  border-color: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 16px 36px rgba(28, 26, 22, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.outline-screen .chapter-card.selected {
+  border-color: rgba(48, 47, 43, 0.48);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 18px 40px rgba(28, 26, 22, 0.18),
+    inset 4px 0 0 #353430;
+  transform: translateY(-1px);
+}
+
+.outline-screen .chapter-card.selected .chapter-order {
+  background: #353430;
+}
+
+.outline-screen .chapter-title-line mark {
+  display: none;
+}
+
+.chapter-selection {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  align-self: start;
+  margin-top: 4px;
+  color: transparent;
+  border: 1.5px solid #c4c0b9;
+  border-radius: 50%;
+  background: rgba(248, 247, 243, 0.85);
+}
+
+.chapter-card.selected .chapter-selection {
+  color: white;
+  border-color: #353430;
+  background: #353430;
+}
+
+.outline-screen .chapter-enter {
+  display: none;
+}
+
+.outline-action .primary-button:disabled {
+  color: #8f8b84;
+}
+
+/* Story articles read like a composed biography page, not a generic content card. */
+.article-screen {
+  padding: 16px 13px 108px;
+}
+
+.article-complete {
+  width: fit-content;
+  justify-content: flex-start;
+  margin: 0 auto 13px;
+  padding: 7px 12px;
+  color: #4f4c46;
+  border: 1px solid rgba(46, 44, 40, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 7px 18px rgba(28, 26, 22, 0.08);
+  font-size: 11px;
+  backdrop-filter: blur(14px);
+}
+
+.article-screen .story-article {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 24px 54px rgba(27, 25, 21, 0.18);
+}
+
+.article-title-block {
+  padding: 27px 21px 23px;
+  text-align: center;
+}
+
+.article-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #736d64;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.article-kicker::before,
+.article-kicker::after {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: #c9c4ba;
+}
+
+.article-title-block h1 {
+  margin: 13px 0 0;
+  color: #23221f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 30px;
+  line-height: 1.36;
+  font-weight: 700;
+}
+
+.article-title-block > p {
+  max-width: 310px;
+  margin: 13px auto 0;
+  color: #68645c;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.article-title-block .article-meta {
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 5px;
+  margin-top: 17px;
+  color: #858078;
+  font-size: 9px;
+}
+
+.article-title-block .article-meta i {
+  background: #b7b1a8;
+}
+
+.article-screen .article-cover {
+  height: 246px;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  background: #d4d0c8;
+}
+
+.article-screen .article-cover::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  background: linear-gradient(to top, rgba(17, 16, 14, 0.6), transparent);
+  pointer-events: none;
+}
+
+.article-screen .article-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+}
+
+.article-screen .article-cover figcaption {
+  position: absolute;
+  z-index: 1;
+  right: 15px;
+  bottom: 13px;
+  left: 15px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  color: white;
+}
+
+.article-screen .article-cover figcaption span {
+  position: static;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.article-screen .article-cover figcaption small {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 9px;
+}
+
+.article-screen .article-body {
+  padding: 27px 21px 30px;
+}
+
+.article-section-label {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  margin: 4px 0 0;
+  color: #5c5851;
+}
+
+.article-section-label + p,
+.article-body blockquote + .article-section-label {
+  margin-top: 20px;
+}
+
+.article-section-label span {
+  font-family: Georgia, serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.article-section-label i {
+  height: 1px;
+  background: #d9d5ce;
+}
+
+.article-section-label strong {
+  font-size: 11px;
+}
+
+.article-screen .article-body > p {
+  margin: 18px 0 0;
+  color: #35332f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 16px;
+  line-height: 2.05;
+  text-align: justify;
+}
+
+.article-screen .article-body > p.article-lede {
+  margin-top: 20px;
+}
+
+.article-screen .article-body > p.article-lede::first-letter {
+  float: left;
+  margin: 7px 7px 0 0;
+  color: #2c2b28;
+  font-family: Georgia, "STSong", serif;
+  font-size: 44px;
+  line-height: 0.72;
+}
+
+.article-screen .article-body blockquote {
+  margin: 27px -6px 0;
+  padding: 22px 19px 19px;
+  position: relative;
+  color: #393630;
+  border: 0;
+  background: #f1efea;
+}
+
+.article-screen .article-body blockquote > span {
+  position: absolute;
+  top: 7px;
+  left: 13px;
+  color: #bbb3a6;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  line-height: 1;
+}
+
+.article-screen .article-body blockquote p {
+  margin: 0;
+  position: relative;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+.article-screen .article-body blockquote cite {
+  display: block;
+  margin-top: 11px;
+  color: #7c766d;
+  font-size: 9px;
+  font-style: normal;
+  text-align: right;
+}
+
+.article-source-note {
+  margin-top: 28px;
+  padding-top: 15px;
+  border-top: 1px solid #dedad3;
+}
+
+.article-source-note span {
+  color: #5d5952;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.article-source-note p {
+  margin: 7px 0 0;
+  color: #888279;
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+.article-screen .fact-check {
+  margin-top: 13px;
+  padding: 15px;
+}
+
+.article-screen .fact-check strong {
+  font-size: 13px;
+}
+
+.article-screen .fact-check small {
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.article-screen .fact-check button {
+  min-width: 54px;
+  height: 34px;
+  font-size: 12px;
+}
+
+.article-library-card {
+  min-height: 116px;
+}
+
+.article-library-card img {
+  width: 92px;
+  height: 92px;
+  object-position: 52% center;
+}
+
+.article-library-card small {
+  font-size: 10px;
+}
+
+.article-library-card strong {
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.article-library-card em {
+  font-size: 10px;
+}
+
+/* Final mobile sizing pass: body copy should read comfortably at phone scale. */
+.discovery-mic {
+  width: 52px;
+  height: 52px;
+}
+
+.record-list strong {
+  font-size: 15px;
+}
+
+.record-list small {
+  font-size: 12px;
+}
+
+.record-list p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.phase-lead h1 {
+  font-size: 34px;
+}
+
+.phase-lead > p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.phase-track span {
+  font-size: 9px;
+}
+
+.outline-version-line small {
+  font-size: 11px;
+}
+
+.outline-screen .outline-stats span {
+  font-size: 11px;
+}
+
+.outline-screen .chapter-main > p {
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.outline-screen .chapter-section-preview > span {
+  font-size: 13px;
+}
+
+.section-choice-copy strong {
+  font-size: 16px;
+}
+
+.section-choice-copy small {
+  font-size: 12px;
+}
+
+.section-choice-copy > p {
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.updated-screen {
+  padding-bottom: 104px;
+}
+
+.updated-screen .chapter-card {
+  grid-template-columns: 52px 1fr 24px;
+}
+
+.updated-screen .chapter-card.selected {
+  border-color: rgba(48, 47, 43, 0.48);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 18px 40px rgba(28, 26, 22, 0.18),
+    inset 4px 0 0 #353430;
+}
+
+.updated-screen .chapter-card.selected .chapter-order {
+  background: #353430;
+}
+
+.updated-screen .chapter-selection {
+  display: grid;
+}
+
 @media (max-height: 720px) and (min-width: 821px) {
   .device-shell {
     height: calc(100vh - 20px);

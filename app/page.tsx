@@ -30,7 +30,6 @@ import {
   Square,
   UserRound,
   Wifi,
-  X,
 } from "lucide-react";
 
 type Screen =
@@ -128,7 +127,6 @@ const initialModules: ModuleItem[] = [
     meta: "1976 年 · 20 岁",
     description: "从一个紧张的年轻人，到被孩子们叫作“林老师”。",
     accent: "red",
-    status: "recommended",
   },
   {
     id: "become-teacher",
@@ -345,6 +343,7 @@ export default function Home() {
   const [factConfirmed, setFactConfirmed] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
+  const [showBiographySwitcher, setShowBiographySwitcher] = useState(false);
   const [biographyName, setBiographyName] = useState("");
   const [biographyProfile, setBiographyProfile] = useState({
     relation: "",
@@ -355,6 +354,8 @@ export default function Home() {
   const [newBiographyRelation, setNewBiographyRelation] = useState("母亲");
   const [newBiographyBirthYear, setNewBiographyBirthYear] = useState("");
   const [newBiographyHometown, setNewBiographyHometown] = useState("");
+  const [outlineChapterChoice, setOutlineChapterChoice] =
+    useState<ChapterItem | null>(null);
 
   useEffect(() => {
     if (screen !== "recording" || isPaused) return;
@@ -375,6 +376,7 @@ export default function Home() {
     if (screen === "processing-outline") {
       const timer = window.setTimeout(() => {
         setJourneyStage("deep");
+        setOutlineChapterChoice(null);
         setScreen("outline");
       }, 1300);
       return () => window.clearTimeout(timer);
@@ -384,7 +386,10 @@ export default function Home() {
       return () => window.clearTimeout(timer);
     }
     if (screen === "processing-update") {
-      const timer = window.setTimeout(() => setScreen("updated"), 1400);
+      const timer = window.setTimeout(() => {
+        setOutlineChapterChoice(null);
+        setScreen("updated");
+      }, 1400);
       return () => window.clearTimeout(timer);
     }
   }, [screen]);
@@ -393,7 +398,7 @@ export default function Home() {
   const answeredCount = answers.filter(Boolean).length;
   const navTitle =
     screen === "create"
-      ? "新建传记"
+      ? "山顶传记"
       : screen === "home"
       ? "山顶传记"
       : screen === "discovery" || screen === "processing-outline"
@@ -500,6 +505,7 @@ export default function Home() {
     setSeconds(0);
     setFactConfirmed(false);
     setJourneyStage("discovery");
+    setOutlineChapterChoice(null);
   }
 
   function navigateFromSideMenu(nextScreen: "home" | "outline") {
@@ -536,6 +542,26 @@ export default function Home() {
     setNewBiographyBirthYear("");
     setNewBiographyHometown("");
     setScreen("create");
+  }
+
+  function openBiographySwitcher() {
+    setShowSideMenu(false);
+    setShowBiographySwitcher(true);
+  }
+
+  function switchBiography(name: string) {
+    setBiographyName(name);
+    setBiographyProfile(
+      name === "林秀兰"
+        ? {
+            relation: "母亲",
+            birthYear: "1956",
+            hometown: "湖南湘潭",
+          }
+        : biographyProfile,
+    );
+    setShowBiographySwitcher(false);
+    resetPrototype();
   }
 
   const leftControl: "none" | "menu" | "back" =
@@ -689,16 +715,14 @@ export default function Home() {
               <div className="side-menu-head">
                 <div>
                   <span>山顶传记</span>
-                  <strong>{biographyName}的人生故事</strong>
+                  <div className="side-biography-title">
+                    <strong>{biographyName}的人生故事</strong>
+                    <button type="button" onClick={openBiographySwitcher}>
+                      <RefreshCw size={12} />
+                      切换
+                    </button>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setShowSideMenu(false)}
-                  aria-label="关闭"
-                  title="关闭"
-                >
-                  <X size={19} />
-                </button>
               </div>
               <div className="side-progress-title">
                 <span>传记进度</span>
@@ -782,6 +806,63 @@ export default function Home() {
           </>
         )}
 
+        {showBiographySwitcher && (
+          <>
+            <button
+              type="button"
+              className="biography-switcher-backdrop"
+              aria-label="关闭传记切换"
+              onClick={() => setShowBiographySwitcher(false)}
+            />
+            <section className="biography-switcher" aria-label="切换传记">
+              <div className="biography-switcher-head">
+                <div>
+                  <span className="eyebrow">切换传记</span>
+                  <h2>选择要继续记录的人</h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowBiographySwitcher(false)}
+                >
+                  取消
+                </button>
+              </div>
+              <div className="biography-switcher-list">
+                <button
+                  type="button"
+                  className="active"
+                  onClick={() => switchBiography(biographyName)}
+                >
+                  <span>{biographyName.slice(0, 1)}</span>
+                  <strong>{biographyName}的人生故事</strong>
+                  <em>当前</em>
+                </button>
+                {biographyName !== "林秀兰" && (
+                  <button
+                    type="button"
+                    onClick={() => switchBiography("林秀兰")}
+                  >
+                    <span>林</span>
+                    <strong>林秀兰的人生故事</strong>
+                    <small>上次记录</small>
+                  </button>
+                )}
+              </div>
+              <button
+                type="button"
+                className="switcher-new-biography"
+                onClick={() => {
+                  setShowBiographySwitcher(false);
+                  prepareNewBiography();
+                }}
+              >
+                <UserRound size={16} />
+                新建传记
+              </button>
+            </section>
+          </>
+        )}
+
         <div className={`screen-content ${backdropClass}`}>
           {screen === "create" && (
             <CreateBiographyScreen
@@ -835,9 +916,12 @@ export default function Home() {
             <OutlineScreen
               chapters={initialChapters}
               biographyName={biographyName}
+              selectedChapter={outlineChapterChoice}
               version="v1"
-              onOpen={openChapter}
-              onContinue={() => openChapter(initialChapters[2])}
+              onSelect={setOutlineChapterChoice}
+              onContinue={() => {
+                if (outlineChapterChoice) openChapter(outlineChapterChoice);
+              }}
             />
           )}
 
@@ -928,7 +1012,11 @@ export default function Home() {
           {screen === "updated" && (
             <UpdatedOutlineScreen
               chapters={updatedChapters}
-              onOpen={openChapter}
+              selectedChapter={outlineChapterChoice}
+              onSelect={setOutlineChapterChoice}
+              onContinue={() => {
+                if (outlineChapterChoice) openChapter(outlineChapterChoice);
+              }}
             />
           )}
         </div>
@@ -964,9 +1052,25 @@ function CreateBiographyScreen({
         <div className="create-biography-mark">
           <UserRound size={24} />
         </div>
-        <span className="eyebrow">开始一本新的传记</span>
-        <h1>这次，想记录谁的人生？</h1>
+        <span className="eyebrow">从一个名字开始</span>
+        <h1>想记录谁的人生？</h1>
         <p>先填写几项基本信息，后续问题和采访提纲会围绕 TA 生成。</p>
+        <div className="create-flow-hint">
+          <span>
+            <i>1</i>
+            建立档案
+          </span>
+          <b />
+          <span>
+            <i>2</i>
+            初步了解
+          </span>
+          <b />
+          <span>
+            <i>3</i>
+            生成提纲
+          </span>
+        </div>
 
         <div className="create-biography-form">
           <label className="create-name-field">
@@ -1070,7 +1174,6 @@ function HomeScreen({
           <small>第一步</small>
           初步了解
         </h1>
-        <p>回答几个录音问题，完成后生成第一版完整采访提纲。</p>
         <div className="home-stage-facts">
           <span>
             <strong>8 个</strong>
@@ -1091,13 +1194,6 @@ function HomeScreen({
           开始初步了解
           <ArrowRight size={18} />
         </button>
-      </div>
-
-      <div className="home-stage-next">
-        <span>完成后</span>
-        <strong>生成第一版提纲</strong>
-        <ChevronRight size={16} />
-        <strong>选择章节深入采访</strong>
       </div>
     </div>
   );
@@ -1344,7 +1440,10 @@ function ArticlesScreen({ onOpen }: { onOpen: () => void }) {
         </span>
       </div>
       <button type="button" className="article-library-card" onClick={onOpen}>
-        <img src="/lin-xiulan-teacher.png" alt="林秀兰老师站在教室里" />
+        <img
+          src="/article-first-class-1976.png"
+          alt="1976 年，一位年轻教师第一次走进乡村教室"
+        />
         <span>
           <small>第三章 · 四十年乡村讲台</small>
           <strong>二十岁那年，我第一次站上讲台</strong>
@@ -1570,14 +1669,16 @@ function PhaseLead({
 function OutlineScreen({
   chapters,
   biographyName,
+  selectedChapter,
   version,
-  onOpen,
+  onSelect,
   onContinue,
 }: {
   chapters: ChapterItem[];
   biographyName: string;
+  selectedChapter: ChapterItem | null;
   version: string;
-  onOpen: (chapter: ChapterItem) => void;
+  onSelect: (chapter: ChapterItem) => void;
   onContinue: () => void;
 }) {
   const sectionCount = chapters.reduce(
@@ -1616,47 +1717,54 @@ function OutlineScreen({
 
       <div className="section-label">
         <span>全书结构</span>
-        <small>点击一级章节选择采访小节</small>
+        <small>先选择一个一级章节</small>
       </div>
 
       <div className="chapter-list">
-        {chapters.map((chapter) => (
-          <button
-            type="button"
-            className={`chapter-card ${
-              chapter.id === "teaching" ? "featured" : ""
-            }`}
-            onClick={() => onOpen(chapter)}
-            key={chapter.id}
-          >
-            <span className="chapter-order">{chapter.order}</span>
-            <span className="chapter-main">
-              <span className="chapter-title-line">
-                <strong>{chapter.title}</strong>
-                <em>{chapter.period}</em>
-                {chapter.id === "teaching" && <mark>建议先采访</mark>}
+        {chapters.map((chapter) => {
+          const isSelected = selectedChapter?.id === chapter.id;
+          return (
+            <button
+              type="button"
+              className={`chapter-card ${isSelected ? "selected" : ""}`}
+              onClick={() => onSelect(chapter)}
+              aria-pressed={isSelected}
+              key={chapter.id}
+            >
+              <span className="chapter-order">{chapter.order}</span>
+              <span className="chapter-main">
+                <span className="chapter-title-line">
+                  <strong>{chapter.title}</strong>
+                  <em>{chapter.period}</em>
+                </span>
+                <p>{chapter.summary}</p>
+                <span className="chapter-section-preview">
+                  {chapter.sections.map((section, index) => (
+                    <span key={section.id}>
+                      <i>{index + 1}</i>
+                      {section.title}
+                    </span>
+                  ))}
+                </span>
               </span>
-              <p>{chapter.summary}</p>
-              <span className="chapter-section-preview">
-                {chapter.sections.map((section, index) => (
-                  <span key={section.id}>
-                    <i>{index + 1}</i>
-                    {section.title}
-                  </span>
-                ))}
+              <span className="chapter-selection" aria-hidden="true">
+                {isSelected && <Check size={15} />}
               </span>
-            </span>
-            <span className="chapter-enter">
-              {chapter.sections.length} 节
-              <ChevronRight size={17} />
-            </span>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
 
       <div className="sticky-action outline-action">
-        <button className="primary-button" type="button" onClick={onContinue}>
-          选择章节，开始深度采访
+        <button
+          className="primary-button"
+          type="button"
+          onClick={onContinue}
+          disabled={!selectedChapter}
+        >
+          {selectedChapter
+            ? `进入「${selectedChapter.title}」`
+            : "请选择一个章节"}
           <ArrowRight size={18} />
         </button>
       </div>
@@ -1718,7 +1826,6 @@ function ChapterScreen({
             <span className="section-choice-copy">
               <span>
                 <strong>{section.title}</strong>
-                {section.status === "recommended" && <em>建议先采访</em>}
                 {section.status === "new" && <em className="new">新增</em>}
                 {section.status === "completed" && <em className="done">已成文</em>}
                 {section.status === "moved" && <em className="moved">顺序调整</em>}
@@ -1937,38 +2044,65 @@ function ArticleScreen({
     <div className="screen article-screen">
       <div className="article-complete">
         <CheckCircle2 size={19} />
-        已根据这次采访生成文章
+        本次采访已整理成文
       </div>
 
-      <article>
-        <div className="article-cover">
-          <img
-            src="/lin-xiulan-teacher.png"
-            alt="林秀兰老师站在教室里"
-          />
-          <span>人物图片 · 原型示例</span>
-        </div>
-        <div className="article-body">
-          <span className="eyebrow">第一篇故事</span>
-          <h1>二十岁那年，我第一次站上讲台</h1>
+      <article className="story-article">
+        <header className="article-title-block">
+          <span className="article-kicker">第三章 · 四十年乡村讲台</span>
+          <h1>二十岁那年，<br />我第一次站上讲台</h1>
+          <p>一个年轻教师走进石桥小学的第一天，也是一段四十年教学生涯的开始。</p>
           <div className="article-meta">
             <span>林秀兰 口述</span>
             <i />
+            <span>子女采访整理</span>
+            <i />
             <span>约 1,260 字</span>
           </div>
-          <p>
-            1976
+        </header>
+
+        <figure className="article-cover">
+          <img
+            src="/article-first-class-1976.png"
+            alt="1976 年，一位年轻教师第一次走进乡村教室"
+          />
+          <figcaption>
+            <span>1976 年秋</span>
+            <small>石桥小学 · 场景还原图</small>
+          </figcaption>
+        </figure>
+
+        <div className="article-body">
+          <div className="article-section-label">
+            <span>01</span>
+            <i />
+            <strong>初到石桥</strong>
+          </div>
+          <p className="article-lede">
+            那是 1976
             年秋天，我提着一只旧藤箱，第一次走进石桥小学。教室比我想象中还要小，窗纸破了两块，二十几个孩子齐刷刷地看着我。那一刻，我连事先准备好的第一句话都忘了。
           </p>
           <blockquote>
-            “王校长把一把旧雨伞递给我，说，山里的雨说来就来，老师不能让孩子等。”
+            <span>“</span>
+            <p>王校长把一把旧雨伞递给我，说，山里的雨说来就来，老师不能让孩子等。</p>
+            <cite>林秀兰回忆</cite>
           </blockquote>
+
+          <div className="article-section-label">
+            <span>02</span>
+            <i />
+            <strong>第一声“林老师”</strong>
+          </div>
           <p>
             第一堂课讲的是一篇短短的课文。下课铃响以后，没有一个孩子起身。我以为自己讲错了，后来才知道，他们只是从没见过这么年轻的老师。一个扎羊角辫的小姑娘跑过来，小声喊了第一句“林老师”。
           </p>
           <p>
             那天回宿舍的路上下起大雨。我撑着王校长借我的伞，鞋上全是泥，心里却第一次觉得，也许我真的可以留在这里。
           </p>
+          <footer className="article-source-note">
+            <span>故事来源</span>
+            <p>根据 2026 年 7 月 22 日深度采访整理，涉及时间与人物信息仍可继续补充。</p>
+          </footer>
         </div>
       </article>
 
@@ -2001,10 +2135,14 @@ function ArticleScreen({
 
 function UpdatedOutlineScreen({
   chapters,
-  onOpen,
+  selectedChapter,
+  onSelect,
+  onContinue,
 }: {
   chapters: ChapterItem[];
-  onOpen: (chapter: ChapterItem) => void;
+  selectedChapter: ChapterItem | null;
+  onSelect: (chapter: ChapterItem) => void;
+  onContinue: () => void;
 }) {
   return (
     <div className="screen updated-screen">
@@ -2040,43 +2178,62 @@ function UpdatedOutlineScreen({
       </div>
 
       <div className="chapter-list updated-outline-tree">
-        {chapters.map((chapter) => (
-          <button
-            type="button"
-            className={`chapter-card ${chapter.changeNote ? "has-change" : ""}`}
-            onClick={() => onOpen(chapter)}
-            key={chapter.id}
-          >
-            <span className="chapter-order">{chapter.order}</span>
-            <span className="chapter-main">
-              <span className="chapter-title-line">
-                <strong>{chapter.title}</strong>
-                <em>{chapter.period}</em>
+        {chapters.map((chapter) => {
+          const isSelected = selectedChapter?.id === chapter.id;
+          return (
+            <button
+              type="button"
+              className={`chapter-card ${
+                chapter.changeNote ? "has-change" : ""
+              } ${isSelected ? "selected" : ""}`}
+              onClick={() => onSelect(chapter)}
+              aria-pressed={isSelected}
+              key={chapter.id}
+            >
+              <span className="chapter-order">{chapter.order}</span>
+              <span className="chapter-main">
+                <span className="chapter-title-line">
+                  <strong>{chapter.title}</strong>
+                  <em>{chapter.period}</em>
+                </span>
+                {chapter.changeNote && (
+                  <mark className="chapter-change-label">
+                    <Sparkles size={13} />
+                    {chapter.changeNote}
+                  </mark>
+                )}
+                <span className="updated-section-lines">
+                  {chapter.sections.map((section, index) => (
+                    <span className={section.status ?? ""} key={section.id}>
+                      <i>{index + 1}</i>
+                      <b>{section.title}</b>
+                      {section.status === "completed" && <em>已成文</em>}
+                      {section.status === "new" && <em>新增</em>}
+                      {section.status === "moved" && <em>后移</em>}
+                    </span>
+                  ))}
+                </span>
               </span>
-              {chapter.changeNote && (
-                <mark className="chapter-change-label">
-                  <Sparkles size={13} />
-                  {chapter.changeNote}
-                </mark>
-              )}
-              <span className="updated-section-lines">
-                {chapter.sections.map((section, index) => (
-                  <span className={section.status ?? ""} key={section.id}>
-                    <i>{index + 1}</i>
-                    <b>{section.title}</b>
-                    {section.status === "completed" && <em>已成文</em>}
-                    {section.status === "new" && <em>新增</em>}
-                    {section.status === "moved" && <em>后移</em>}
-                  </span>
-                ))}
+              <span className="chapter-selection" aria-hidden="true">
+                {isSelected && <Check size={15} />}
               </span>
-            </span>
-            <span className="chapter-enter">
-              查看
-              <ChevronRight size={17} />
-            </span>
-          </button>
-        ))}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="sticky-action outline-action">
+        <button
+          className="primary-button"
+          type="button"
+          onClick={onContinue}
+          disabled={!selectedChapter}
+        >
+          {selectedChapter
+            ? `进入「${selectedChapter.title}」`
+            : "请选择下一次采访章节"}
+          <ArrowRight size={18} />
+        </button>
       </div>
     </div>
   );
