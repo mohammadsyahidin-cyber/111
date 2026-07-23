@@ -4003,6 +4003,321 @@ button:focus-visible {
   background: #857a74;
 }
 
+/* Biography creation is the product entry; numbered phases begin afterwards. */
+.icon-button-spacer {
+  width: 42px;
+  height: 42px;
+  display: block;
+  flex: 0 0 42px;
+}
+
+.create-biography-screen {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 28px;
+  background: rgba(244, 242, 237, 0.58);
+}
+
+.create-biography-card {
+  width: 100%;
+  min-height: 570px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 22px 22px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow:
+    0 22px 52px rgba(28, 26, 22, 0.17),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(22px);
+}
+
+.create-biography-mark {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+  color: white;
+  border-radius: 50%;
+  background: #2d2d2a;
+  box-shadow:
+    0 14px 28px rgba(29, 28, 25, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.create-biography-card > .eyebrow {
+  color: #736e66;
+  font-size: 10px;
+}
+
+.create-biography-card > h1 {
+  margin: 9px 0 0;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 30px;
+  line-height: 1.25;
+}
+
+.create-biography-card > p {
+  max-width: 300px;
+  margin: 11px 0 0;
+  color: #716d66;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.create-biography-form {
+  width: 100%;
+  display: grid;
+  gap: 15px;
+  margin-top: 28px;
+  text-align: left;
+}
+
+.create-biography-form label {
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+  color: #55524d;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.create-biography-form label > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.create-biography-form label em {
+  padding: 2px 6px;
+  color: #6f625c;
+  border-radius: 999px;
+  background: #ece9e5;
+  font-size: 8px;
+  font-style: normal;
+}
+
+.create-biography-form input,
+.create-biography-form select {
+  width: 100%;
+  height: 46px;
+  padding: 0 13px;
+  color: #292825;
+  border: 1px solid rgba(46, 44, 40, 0.13);
+  border-radius: 12px;
+  outline: none;
+  background: rgba(249, 248, 245, 0.94);
+  box-shadow:
+    inset 0 1px 2px rgba(30, 29, 26, 0.04),
+    0 5px 14px rgba(30, 29, 26, 0.04);
+  font: inherit;
+}
+
+.create-biography-form input:focus,
+.create-biography-form select:focus {
+  border-color: rgba(55, 53, 48, 0.42);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(42, 41, 37, 0.07);
+}
+
+.create-form-row {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 11px;
+}
+
+.create-biography-submit {
+  width: 100%;
+  min-height: 51px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  color: white;
+  border: 1px solid rgba(20, 20, 18, 0.18);
+  border-radius: 999px;
+  background: #252522;
+  box-shadow:
+    0 13px 28px rgba(27, 26, 23, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.create-biography-submit:disabled {
+  color: #9a9790;
+  border-color: rgba(40, 38, 34, 0.06);
+  background: rgba(229, 227, 221, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    inset 0 -2px 0 rgba(40, 38, 34, 0.04);
+}
+
+.home-profile-meta {
+  margin-top: 10px;
+  color: #817c74;
+  font-size: 9px;
+}
+
+.home-profile-meta + .home-stage-index {
+  margin-top: 34px;
+}
+
+/* 02 and 03 continue the visual language introduced by the 01 home screen. */
+.phase-lead {
+  min-height: 278px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 23px 20px 17px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow:
+    0 18px 42px rgba(28, 26, 22, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+}
+
+.phase-lead-index {
+  color: rgba(92, 87, 81, 0.19);
+  font-family: Georgia, serif;
+  font-size: 61px;
+  line-height: 0.85;
+  font-weight: 700;
+}
+
+.phase-lead h1 {
+  margin: 11px 0 0;
+  display: grid;
+  gap: 6px;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 32px;
+  line-height: 1.14;
+}
+
+.phase-lead h1 small {
+  color: #6b6760;
+  font-family:
+    "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.phase-lead > p {
+  max-width: 305px;
+  margin: 13px 0 0;
+  color: #68645d;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.phase-track {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid rgba(42, 40, 36, 0.09);
+}
+
+.phase-track span {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  color: #97938b;
+  font-size: 8px;
+}
+
+.phase-track span + span::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: -25%;
+  width: 50%;
+  height: 1px;
+  background: #d8d5cf;
+}
+
+.phase-track i {
+  width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  color: #8d8982;
+  border: 1px solid #cfccc5;
+  border-radius: 50%;
+  background: #f6f4ef;
+  font-size: 6px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.phase-track .complete,
+.phase-track .current {
+  color: #45433e;
+  font-weight: 750;
+}
+
+.phase-track .complete i {
+  color: white;
+  border-color: #77736c;
+  background: #77736c;
+}
+
+.phase-track .current i {
+  color: white;
+  border-color: #2f2f2c;
+  background: #2f2f2c;
+  box-shadow: 0 5px 12px rgba(30, 29, 26, 0.18);
+}
+
+.outline-version-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 19px 2px 10px;
+}
+
+.outline-version-line span {
+  color: #34332f;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.outline-version-line small {
+  max-width: 190px;
+  color: #77736c;
+  font-size: 9px;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.chapter-screen > .phase-lead {
+  margin-bottom: 18px;
+}
+
+@media (max-height: 760px) {
+  .create-biography-screen {
+    align-items: flex-start;
+  }
+
+  .create-biography-card {
+    min-height: 550px;
+  }
+}
+
 @media (max-height: 720px) and (min-width: 821px) {
   .device-shell {
     height: calc(100vh - 20px);

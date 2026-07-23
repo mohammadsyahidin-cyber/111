@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 
 type Screen =
+  | "create"
   | "home"
   | "discovery"
   | "processing-outline"
@@ -312,7 +313,7 @@ function formatTime(totalSeconds: number) {
 }
 
 export default function Home() {
-  const [screen, setScreen] = useState<Screen>("home");
+  const [screen, setScreen] = useState<Screen>("create");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [isDiscoveryRecording, setIsDiscoveryRecording] = useState(false);
@@ -344,8 +345,12 @@ export default function Home() {
   const [factConfirmed, setFactConfirmed] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
-  const [showNewBiography, setShowNewBiography] = useState(false);
-  const [biographyName, setBiographyName] = useState("林秀兰");
+  const [biographyName, setBiographyName] = useState("");
+  const [biographyProfile, setBiographyProfile] = useState({
+    relation: "",
+    birthYear: "",
+    hometown: "",
+  });
   const [newBiographyName, setNewBiographyName] = useState("");
   const [newBiographyRelation, setNewBiographyRelation] = useState("母亲");
   const [newBiographyBirthYear, setNewBiographyBirthYear] = useState("");
@@ -387,7 +392,9 @@ export default function Home() {
   const currentAnswer = answers[questionIndex];
   const answeredCount = answers.filter(Boolean).length;
   const navTitle =
-    screen === "home"
+    screen === "create"
+      ? "新建传记"
+      : screen === "home"
       ? "山顶传记"
       : screen === "discovery" || screen === "processing-outline"
       ? "初步了解"
@@ -508,17 +515,33 @@ export default function Home() {
 
   function createBiography() {
     const nextName = newBiographyName.trim();
-    if (nextName) setBiographyName(nextName);
+    if (!nextName) return;
+    setBiographyName(nextName);
+    setBiographyProfile({
+      relation: newBiographyRelation,
+      birthYear: newBiographyBirthYear.trim(),
+      hometown: newBiographyHometown.trim(),
+    });
     setNewBiographyName("");
     setNewBiographyRelation("母亲");
     setNewBiographyBirthYear("");
     setNewBiographyHometown("");
-    setShowNewBiography(false);
     resetPrototype();
   }
 
-  const leftControl: "menu" | "back" =
-    screen === "home" ||
+  function prepareNewBiography() {
+    setShowSideMenu(false);
+    setNewBiographyName("");
+    setNewBiographyRelation("母亲");
+    setNewBiographyBirthYear("");
+    setNewBiographyHometown("");
+    setScreen("create");
+  }
+
+  const leftControl: "none" | "menu" | "back" =
+    screen === "create"
+      ? "none"
+      : screen === "home" ||
     screen === "outline" ||
     screen === "records" ||
     screen === "articles" ||
@@ -527,6 +550,7 @@ export default function Home() {
       : "back";
 
   function handleLeftControl() {
+    if (leftControl === "none") return;
     if (leftControl === "menu") {
       setShowSideMenu(true);
       return;
@@ -570,6 +594,7 @@ export default function Home() {
   }
 
   const backdropClass =
+    screen === "create" ||
     screen === "home" ||
     screen === "discovery" ||
     screen === "processing-outline"
@@ -597,19 +622,23 @@ export default function Home() {
         </div>
 
         <header className="app-header">
-          <button
-            className="icon-button"
-            type="button"
-            onClick={handleLeftControl}
-            aria-label={leftControl === "menu" ? "打开功能菜单" : "返回"}
-            title={leftControl === "menu" ? "功能菜单" : "返回"}
-          >
-            {leftControl === "menu" ? (
-              <Menu size={22} />
-            ) : (
-              <ArrowLeft size={21} />
-            )}
-          </button>
+          {leftControl === "none" ? (
+            <span className="icon-button-spacer" />
+          ) : (
+            <button
+              className="icon-button"
+              type="button"
+              onClick={handleLeftControl}
+              aria-label={leftControl === "menu" ? "打开功能菜单" : "返回"}
+              title={leftControl === "menu" ? "功能菜单" : "返回"}
+            >
+              {leftControl === "menu" ? (
+                <Menu size={22} />
+              ) : (
+                <ArrowLeft size={21} />
+              )}
+            </button>
+          )}
           <div className="app-title">{navTitle}</div>
           <div className="menu-wrap">
             <div className="mini-program-capsule">
@@ -744,10 +773,7 @@ export default function Home() {
               <button
                 type="button"
                 className="new-biography-button"
-                onClick={() => {
-                  setShowSideMenu(false);
-                  setShowNewBiography(true);
-                }}
+                onClick={prepareNewBiography}
               >
                 <UserRound size={18} />
                 新建传记
@@ -756,92 +782,25 @@ export default function Home() {
           </>
         )}
 
-        {showNewBiography && (
-          <div className="dialog-backdrop" role="presentation">
-            <div className="new-biography-dialog" role="dialog" aria-modal="true">
-              <div className="dialog-head">
-                <div>
-                  <span className="eyebrow">新建传记</span>
-                  <h2>这本传记要写给谁？</h2>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowNewBiography(false)}
-                  aria-label="关闭"
-                  title="关闭"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-              <label>
-                被记录人姓名 <em>必填</em>
-                <input
-                  value={newBiographyName}
-                  onChange={(event) => setNewBiographyName(event.target.value)}
-                  placeholder="例如：李建国"
-                  autoFocus
-                />
-              </label>
-              <div className="dialog-form-grid">
-                <label>
-                  你和 TA 的关系
-                  <select
-                    value={newBiographyRelation}
-                    onChange={(event) =>
-                      setNewBiographyRelation(event.target.value)
-                    }
-                  >
-                    <option>父亲</option>
-                    <option>母亲</option>
-                    <option>其他长辈</option>
-                    <option>伴侣</option>
-                    <option>自己</option>
-                  </select>
-                </label>
-                <label>
-                  出生年份
-                  <input
-                    value={newBiographyBirthYear}
-                    onChange={(event) =>
-                      setNewBiographyBirthYear(event.target.value)
-                    }
-                    inputMode="numeric"
-                    placeholder="例如：1958"
-                  />
-                </label>
-              </div>
-              <label>
-                家乡或长期生活地
-                <input
-                  value={newBiographyHometown}
-                  onChange={(event) =>
-                    setNewBiographyHometown(event.target.value)
-                  }
-                  placeholder="例如：湖南湘潭"
-                />
-              </label>
-              <p>创建后会从“初步了解”开始，逐步生成这本传记的采访提纲。</p>
-              <div className="dialog-actions">
-                <button type="button" onClick={() => setShowNewBiography(false)}>
-                  取消
-                </button>
-                <button
-                  type="button"
-                  className="dialog-primary"
-                  onClick={createBiography}
-                  disabled={!newBiographyName.trim()}
-                >
-                  创建并开始
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         <div className={`screen-content ${backdropClass}`}>
+          {screen === "create" && (
+            <CreateBiographyScreen
+              name={newBiographyName}
+              relation={newBiographyRelation}
+              birthYear={newBiographyBirthYear}
+              hometown={newBiographyHometown}
+              onNameChange={setNewBiographyName}
+              onRelationChange={setNewBiographyRelation}
+              onBirthYearChange={setNewBiographyBirthYear}
+              onHometownChange={setNewBiographyHometown}
+              onCreate={createBiography}
+            />
+          )}
+
           {screen === "home" && (
             <HomeScreen
               biographyName={biographyName}
+              profile={biographyProfile}
               onStart={() => {
                 setDiscoveryParentScreen("home");
                 setScreen("discovery");
@@ -875,6 +834,7 @@ export default function Home() {
           {screen === "outline" && (
             <OutlineScreen
               chapters={initialChapters}
+              biographyName={biographyName}
               version="v1"
               onOpen={openChapter}
               onContinue={() => openChapter(initialChapters[2])}
@@ -977,13 +937,122 @@ export default function Home() {
   );
 }
 
+function CreateBiographyScreen({
+  name,
+  relation,
+  birthYear,
+  hometown,
+  onNameChange,
+  onRelationChange,
+  onBirthYearChange,
+  onHometownChange,
+  onCreate,
+}: {
+  name: string;
+  relation: string;
+  birthYear: string;
+  hometown: string;
+  onNameChange: (value: string) => void;
+  onRelationChange: (value: string) => void;
+  onBirthYearChange: (value: string) => void;
+  onHometownChange: (value: string) => void;
+  onCreate: () => void;
+}) {
+  return (
+    <div className="screen create-biography-screen">
+      <div className="create-biography-card">
+        <div className="create-biography-mark">
+          <UserRound size={24} />
+        </div>
+        <span className="eyebrow">开始一本新的传记</span>
+        <h1>这次，想记录谁的人生？</h1>
+        <p>先填写几项基本信息，后续问题和采访提纲会围绕 TA 生成。</p>
+
+        <div className="create-biography-form">
+          <label className="create-name-field">
+            <span>
+              被记录人姓名 <em>必填</em>
+            </span>
+            <input
+              value={name}
+              onChange={(event) => onNameChange(event.target.value)}
+              placeholder="例如：李建国"
+              autoFocus
+            />
+          </label>
+
+          <div className="create-form-row">
+            <label>
+              <span>你和 TA 的关系</span>
+              <select
+                value={relation}
+                onChange={(event) => onRelationChange(event.target.value)}
+              >
+                <option>父亲</option>
+                <option>母亲</option>
+                <option>其他长辈</option>
+                <option>伴侣</option>
+                <option>自己</option>
+              </select>
+            </label>
+            <label>
+              <span>出生年份</span>
+              <input
+                value={birthYear}
+                onChange={(event) => onBirthYearChange(event.target.value)}
+                inputMode="numeric"
+                placeholder="例如：1958"
+              />
+            </label>
+          </div>
+
+          <label>
+            <span>家乡或长期生活地</span>
+            <input
+              value={hometown}
+              onChange={(event) => onHometownChange(event.target.value)}
+              placeholder="例如：湖南湘潭"
+            />
+          </label>
+        </div>
+
+        <button
+          type="button"
+          className="create-biography-submit"
+          onClick={onCreate}
+          disabled={!name.trim()}
+        >
+          创建传记
+          <ArrowRight size={18} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function HomeScreen({
   biographyName,
+  profile,
   onStart,
 }: {
   biographyName: string;
+  profile: {
+    relation: string;
+    birthYear: string;
+    hometown: string;
+  };
   onStart: () => void;
 }) {
+  const profileDetails = [
+    profile.relation
+      ? profile.relation === "自己"
+        ? "为自己记录"
+        : `我的${profile.relation}`
+      : "",
+    profile.birthYear ? `${profile.birthYear} 年出生` : "",
+    profile.hometown,
+  ].filter(Boolean);
+
   return (
     <div className="screen home-screen">
       <div className="home-stage-card">
@@ -993,6 +1062,9 @@ function HomeScreen({
             正在为 <strong>{biographyName}</strong> 记录人生
           </span>
         </div>
+        {profileDetails.length > 0 && (
+          <div className="home-profile-meta">{profileDetails.join(" · ")}</div>
+        )}
         <span className="home-stage-index">01</span>
         <h1>
           <small>第一步</small>
@@ -1453,13 +1525,57 @@ function ProcessingScreen({
   );
 }
 
+function PhaseLead({
+  number,
+  step,
+  title,
+  copy,
+  status,
+}: {
+  number: "02" | "03";
+  step: string;
+  title: string;
+  copy: string;
+  status: [string, string, string];
+}) {
+  return (
+    <section className={`phase-lead phase-lead-${number}`}>
+      <span className="phase-lead-index">{number}</span>
+      <h1>
+        <small>{step}</small>
+        {title}
+      </h1>
+      <p>{copy}</p>
+      <div className="phase-track" aria-label="传记流程进度">
+        {status.map((label, index) => (
+          <span
+            className={
+              index + 1 < Number(number)
+                ? "complete"
+                : index + 1 === Number(number)
+                  ? "current"
+                  : ""
+            }
+            key={label}
+          >
+            <i>{String(index + 1).padStart(2, "0")}</i>
+            {label}
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function OutlineScreen({
   chapters,
+  biographyName,
   version,
   onOpen,
   onContinue,
 }: {
   chapters: ChapterItem[];
+  biographyName: string;
   version: string;
   onOpen: (chapter: ChapterItem) => void;
   onContinue: () => void;
@@ -1470,10 +1586,17 @@ function OutlineScreen({
   );
   return (
     <div className="screen outline-screen">
-      <div className="screen-heading compact">
-        <span className="eyebrow">完整采访提纲 {version}</span>
-        <h1>林秀兰的人生故事</h1>
-        <p>一级标题构成整本传记的章节，二级标题是可以逐次完成的采访小节。</p>
+      <PhaseLead
+        number="02"
+        step="第二步"
+        title="采访提纲"
+        copy={`${biographyName}的第一版完整提纲已经生成。先看全书结构，再选择一个章节开始采访。`}
+        status={["初步了解", "采访提纲", "深度采访"]}
+      />
+
+      <div className="outline-version-line">
+        <span>完整采访提纲 {version}</span>
+        <small>一级标题为章节，二级标题为采访小节</small>
       </div>
 
       <div className="outline-stats">
@@ -1552,6 +1675,14 @@ function ChapterScreen({
 }) {
   return (
     <div className="screen chapter-screen">
+      <PhaseLead
+        number="03"
+        step="第三步"
+        title="深度采访"
+        copy="从当前章节选择一个采访小节，按照问题提示完成一次有方向、有结果的交流。"
+        status={["初步了解", "提纲已生成", "深度采访"]}
+      />
+
       <div className="chapter-hero">
         <span>{chapter.order}</span>
         <h1>{chapter.title}</h1>
