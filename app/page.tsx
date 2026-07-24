@@ -1043,7 +1043,12 @@ function CreateBiographyEntryScreen({ onStart }: { onStart: () => void }) {
         <p>
           从一个想记录的人开始，把散落的回忆慢慢整理成可以留下来的故事。
         </p>
-        <button type="button" className="create-entry-button" onClick={onStart}>
+        <button
+          type="button"
+          className="create-entry-button"
+          onClick={onStart}
+          onPointerUp={onStart}
+        >
           创建一本传记
           <ArrowRight size={18} />
         </button>
@@ -1697,72 +1702,74 @@ function OutlineScreen({
   );
   return (
     <div className="screen outline-screen">
-      <PhaseLead
-        number="02"
-        step="第二步"
-        title="采访提纲"
-        copy={`${biographyName}的第一版完整提纲已经生成。先看全书结构，再选择一个章节开始采访。`}
-        status={["初步了解", "采访提纲", "深度采访"]}
-      />
+      <div className="outline-scroll-area">
+        <PhaseLead
+          number="02"
+          step="第二步"
+          title="采访提纲"
+          copy={`${biographyName}的第一版完整提纲已经生成。先看全书结构，再选择一个章节开始采访。`}
+          status={["初步了解", "采访提纲", "深度采访"]}
+        />
 
-      <div className="outline-version-line">
-        <span>完整采访提纲 {version}</span>
-        <small>一级标题为章节，二级标题为采访小节</small>
-      </div>
-
-      <div className="outline-stats">
-        <div>
-          <strong>{chapters.length}</strong>
-          <span>个一级章节</span>
+        <div className="outline-version-line">
+          <span>完整采访提纲 {version}</span>
+          <small>一级标题为章节，二级标题为采访小节</small>
         </div>
-        <div>
-          <strong>{sectionCount}</strong>
-          <span>个二级小节</span>
-        </div>
-        <div>
-          <strong>0</strong>
-          <span>篇文章完成</span>
-        </div>
-      </div>
 
-      <div className="section-label">
-        <span>全书结构</span>
-        <small>先选择一个一级章节</small>
-      </div>
+        <div className="outline-stats">
+          <div>
+            <strong>{chapters.length}</strong>
+            <span>个一级章节</span>
+          </div>
+          <div>
+            <strong>{sectionCount}</strong>
+            <span>个二级小节</span>
+          </div>
+          <div>
+            <strong>0</strong>
+            <span>篇文章完成</span>
+          </div>
+        </div>
 
-      <div className="chapter-list">
-        {chapters.map((chapter) => {
-          const isSelected = selectedChapter?.id === chapter.id;
-          return (
-            <button
-              type="button"
-              className={`chapter-card ${isSelected ? "selected" : ""}`}
-              onClick={() => onSelect(chapter)}
-              aria-pressed={isSelected}
-              key={chapter.id}
-            >
-              <span className="chapter-order">{chapter.order}</span>
-              <span className="chapter-main">
-                <span className="chapter-title-line">
-                  <strong>{chapter.title}</strong>
-                  <em>{chapter.period}</em>
+        <div className="section-label">
+          <span>全书结构</span>
+          <small>先选择一个一级章节</small>
+        </div>
+
+        <div className="chapter-list">
+          {chapters.map((chapter) => {
+            const isSelected = selectedChapter?.id === chapter.id;
+            return (
+              <button
+                type="button"
+                className={`chapter-card ${isSelected ? "selected" : ""}`}
+                onClick={() => onSelect(chapter)}
+                aria-pressed={isSelected}
+                key={chapter.id}
+              >
+                <span className="chapter-order">{chapter.order}</span>
+                <span className="chapter-main">
+                  <span className="chapter-title-line">
+                    <strong>{chapter.title}</strong>
+                    <em>{chapter.period}</em>
+                  </span>
+                  <p>{chapter.summary}</p>
+                  <span className="chapter-section-preview">
+                    {chapter.sections.map((section, index) => (
+                      <span key={section.id}>
+                        <i>{index + 1}</i>
+                        {section.title}
+                      </span>
+                    ))}
+                  </span>
                 </span>
-                <p>{chapter.summary}</p>
-                <span className="chapter-section-preview">
-                  {chapter.sections.map((section, index) => (
-                    <span key={section.id}>
-                      <i>{index + 1}</i>
-                      {section.title}
-                    </span>
-                  ))}
+                <span className="chapter-selection" aria-hidden="true">
+                  {isSelected && <Check size={15} />}
                 </span>
-              </span>
-              <span className="chapter-selection" aria-hidden="true">
-                {isSelected && <Check size={15} />}
-              </span>
-            </button>
-          );
-        })}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="sticky-action outline-action">
