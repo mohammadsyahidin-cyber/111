@@ -6124,3 +6124,81 @@ button:focus-visible {
   color: #383530;
   font-weight: 520;
 }
+
+/* Restore the discovery question screen rhythm; keep only softer question type. */
+.screen-content-discovery {
+  overflow-y: auto;
+}
+
+.discovery-screen {
+  padding: 24px 22px 104px;
+}
+
+.discovery-intro {
+  margin: -24px -22px 20px;
+  padding: 15px 22px 13px;
+}
+
+.discovery-intro p {
+  margin: 7px 0 0 44px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.discovery-toolbar {
+  margin-top: 0;
+}
+
+.discovery-screen .screen-heading {
+  margin-top: 18px;
+}
+
+.discovery-screen .screen-heading h1 {
+  color: #4d4943;
+  font-size: 21px;
+  line-height: 1.48;
+  font-weight: 500;
+}
+
+.discovery-screen .screen-heading p {
+  margin-top: 9px;
+  color: #706b63;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.discovery-recorder {
+  margin-top: 22px;
+  padding: 22px 16px 18px;
+}
+
+.discovery-wave {
+  height: 54px;
+}
+
+.discovery-time {
+  margin-top: 7px;
+}
+
+.discovery-mic {
+  width: 72px;
+  height: 72px;
+  margin-top: 21px;
+}
+
+.discovery-recorder > strong {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.discovery-transcript {
+  margin-top: 28px;
+  padding: 15px;
+}
+
+.discovery-transcript p {
+  max-height: none;
+  overflow: visible;
+  font-size: 13px;
+  line-height: 1.75;
+}
