@@ -4654,8 +4654,8 @@ button:focus-visible {
 }
 
 .create-biography-card {
-  min-height: 558px;
-  padding: 26px 22px 22px;
+  min-height: 590px;
+  padding: 28px 22px 24px;
 }
 
 .create-biography-mark {
@@ -4678,6 +4678,7 @@ button:focus-visible {
 
 .create-biography-form {
   margin-top: 34px;
+  margin-bottom: 30px;
 }
 
 .create-biography-form label {
@@ -4691,6 +4692,7 @@ button:focus-visible {
 }
 
 .create-biography-submit {
+  margin-top: 0;
   font-size: 14px;
 }
 
