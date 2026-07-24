@@ -4588,12 +4588,12 @@ button:focus-visible {
 
 .create-entry-card {
   width: 100%;
-  min-height: 500px;
+  min-height: 620px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  padding: 34px 24px 26px;
+  justify-content: flex-end;
+  padding: 46px 24px 30px;
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.76);
