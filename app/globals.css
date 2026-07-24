@@ -6202,3 +6202,84 @@ button:focus-visible {
   font-size: 13px;
   line-height: 1.75;
 }
+
+/* Clean up article header, side menu palette and outline background. */
+.article-title-block .article-meta {
+  display: block;
+  max-width: 100%;
+  margin-top: 12px;
+  color: #7a746c;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: nowrap;
+}
+
+.article-title-block h1 {
+  max-width: 9em;
+}
+
+.side-menu nav.side-progress > button,
+.side-article-entry {
+  border-color: transparent;
+  background: transparent;
+}
+
+.side-menu nav.side-progress > button.current {
+  border-color: rgba(61, 88, 93, 0.18);
+  background: rgba(235, 242, 242, 0.72);
+}
+
+.side-menu nav.side-progress > button > i {
+  color: #3e5b61;
+  border-color: rgba(62, 91, 97, 0.18);
+  background: #e9f0f1;
+}
+
+.side-menu nav.side-progress > button.current > i,
+.side-menu nav.side-progress > button.complete > i {
+  color: white;
+  border-color: #3e5b61;
+  background: #3e5b61;
+}
+
+.side-menu nav.side-progress > button > em,
+.side-menu nav.side-progress > button.current > em,
+.side-menu nav.side-progress > button.complete > em {
+  color: #3e5b61;
+  background: #e9f0f1;
+}
+
+.side-menu nav.side-progress > button.upcoming > i {
+  color: #8b8780;
+  border-color: rgba(64, 60, 52, 0.12);
+  background: #eceae5;
+}
+
+.side-menu nav.side-progress > button.upcoming > em {
+  color: #716d65;
+  background: #eceae5;
+}
+
+.side-article-entry {
+  border-color: rgba(62, 91, 97, 0.16);
+  background: rgba(247, 250, 249, 0.78);
+}
+
+.side-article-entry > svg {
+  color: #3e5b61;
+  background: #e9f0f1;
+}
+
+.side-article-entry em {
+  color: #3e5b61;
+  background: #e9f0f1;
+}
+
+.screen-content.backdrop-outline {
+  background-color: rgba(238, 235, 228, 0.28);
+  background-position: 33.333% top;
+}
+
+.outline-screen {
+  background: rgba(247, 245, 240, 0.62);
+}
