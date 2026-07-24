@@ -6283,3 +6283,98 @@ button:focus-visible {
 .outline-screen {
   background: rgba(247, 245, 240, 0.62);
 }
+
+/* Gold-brown side menu and softer question typography. */
+.side-menu nav.side-progress > button.current {
+  border-color: rgba(166, 124, 63, 0.24);
+  background: rgba(247, 239, 224, 0.78);
+}
+
+.side-menu nav.side-progress > button > i {
+  color: #8b6837;
+  border-color: rgba(166, 124, 63, 0.22);
+  background: #f4ead9;
+}
+
+.side-menu nav.side-progress > button.current > i,
+.side-menu nav.side-progress > button.complete > i {
+  color: white;
+  border-color: #a67c3f;
+  background: #a67c3f;
+}
+
+.side-menu nav.side-progress > button > em,
+.side-menu nav.side-progress > button.current > em,
+.side-menu nav.side-progress > button.complete > em {
+  color: #805f32;
+  background: #f4ead9;
+}
+
+.side-menu nav.side-progress > button.upcoming > i {
+  color: #9a8f7e;
+  border-color: rgba(113, 104, 87, 0.14);
+  background: #eee9df;
+}
+
+.side-menu nav.side-progress > button.upcoming > em {
+  color: #7a6e5c;
+  background: #eee9df;
+}
+
+.side-article-entry {
+  border-color: rgba(166, 124, 63, 0.22);
+  background: rgba(252, 248, 240, 0.82);
+}
+
+.side-article-entry > svg {
+  color: #9a7440;
+  background: #f6eadc;
+}
+
+.side-article-entry em {
+  color: #805f32;
+  background: #f4ead9;
+}
+
+.discovery-screen .screen-heading h1,
+.guide-screen .question-preview-list p,
+.current-question h1,
+.mini-question-list p {
+  color: #4f4941;
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "KaiTi", serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.discovery-screen .screen-heading h1 {
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.guide-screen .question-preview-list p {
+  color: #5a5349;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.current-question h1 {
+  color: #474139;
+  font-size: 28px;
+  line-height: 1.52;
+  font-weight: 400;
+}
+
+.mini-question-list p {
+  color: #5d564c;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.screen-content.backdrop-outline {
+  background-color: rgba(232, 238, 234, 0.42);
+  background-position: 100% center;
+}
+
+.outline-screen {
+  background: rgba(240, 246, 242, 0.68);
+}
