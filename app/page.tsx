@@ -1814,7 +1814,6 @@ function ChapterScreen({
 
       <div className="section-label">
         <span>选择本次采访小节</span>
-        <small>二级标题 · 不必按顺序</small>
       </div>
 
       <div className="section-choice-list">
@@ -1849,10 +1848,6 @@ function ChapterScreen({
             <ChevronRight size={18} />
           </button>
         ))}
-      </div>
-
-      <div className="chapter-footnote">
-        选择小节后，小青会给出这一节的采访问题；实际交流中仍可自由追问或跳过。
       </div>
     </div>
   );
