@@ -1169,7 +1169,7 @@ function HomeScreen({
     <div className="screen home-screen">
       <div className="home-stage-card">
         <div className="home-stage-person">
-          <img src="/lin-xiulan-teacher.png" alt={`${biographyName}的传记`} />
+          <img src="./lin-xiulan-teacher.png" alt={`${biographyName}的传记`} />
           <span>
             正在为 <strong>{biographyName}</strong> 记录人生
           </span>
@@ -1449,7 +1449,7 @@ function ArticlesScreen({ onOpen }: { onOpen: () => void }) {
       </div>
       <button type="button" className="article-library-card" onClick={onOpen}>
         <img
-          src="/first-classroom-1976.png"
+          src="./first-classroom-1976.png"
           alt="1976 年，一位年轻教师第一次走进乡村教室"
         />
         <span>
@@ -2047,7 +2047,7 @@ function ArticleScreen({
 
         <figure className="article-cover">
           <img
-            src="/first-classroom-1976.png"
+            src="./first-classroom-1976.png"
             alt="1976 年，一位年轻教师第一次走进乡村教室"
           />
           <figcaption>
