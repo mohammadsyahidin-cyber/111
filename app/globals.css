@@ -5945,102 +5945,6 @@ button:focus-visible {
   background: rgba(240, 246, 242, 0.68);
 }
 
-/* Minimal article reading surface. */
-.article-screen {
-  padding: 20px 14px 108px;
-}
-
-.article-screen .story-article {
-  border: 1px solid rgba(255, 255, 255, 0.74);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 18px 42px rgba(27, 25, 21, 0.14);
-}
-
-.article-title-block {
-  padding: 26px 22px 18px;
-}
-
-.article-serial {
-  display: block;
-  color: #9a7440;
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial,
-    sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.article-title-block h1 {
-  max-width: none;
-  margin: 12px 0 0;
-  color: #24221e;
-  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
-  font-size: 34px;
-  line-height: 1.26;
-  font-weight: 400;
-  text-wrap: balance;
-}
-
-.article-title-block > p {
-  display: none;
-}
-
-.article-title-block .article-meta {
-  display: block;
-  margin-top: 12px;
-  color: #827b72;
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: nowrap;
-}
-
-.article-screen .article-cover {
-  margin: 0 22px;
-  border-radius: 7px;
-}
-
-.article-screen .article-cover figcaption {
-  padding: 9px 11px 11px;
-}
-
-.article-screen .article-cover figcaption span {
-  font-size: 12px;
-}
-
-.article-screen .article-body {
-  padding: 24px 22px 28px;
-}
-
-.article-screen .article-body > p,
-.article-screen .article-body > p.article-lede {
-  margin: 0 0 16px;
-  color: #37342f;
-  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
-  font-size: 17px;
-  line-height: 2;
-  font-weight: 400;
-  text-align: left;
-}
-
-.article-screen .article-body > p + p {
-  margin-top: 16px;
-}
-
-.article-screen .article-body blockquote {
-  margin: 18px 0;
-  padding: 14px 15px;
-  color: #5c4a2d;
-  border-left: 3px solid #a8864f;
-  background: #f7f1e6;
-}
-
-.article-screen .article-body blockquote p {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.85;
-  font-weight: 400;
-}
-
 .guide-screen .question-preview-list li {
   grid-template-columns: 31px 1fr;
   gap: 12px;
@@ -6473,4 +6377,73 @@ button:focus-visible {
 
 .outline-screen {
   background: rgba(240, 246, 242, 0.68);
+}
+
+/* Final article override: simple, quiet reading page. */
+.article-screen {
+  padding: 20px 14px 108px;
+}
+
+.article-screen .story-article {
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 42px rgba(27, 25, 21, 0.14);
+}
+
+.article-title-block {
+  padding: 26px 22px 18px;
+}
+
+.article-serial {
+  display: block;
+  color: #9a7440;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial,
+    sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.article-title-block h1 {
+  max-width: none;
+  margin: 12px 0 0;
+  color: #24221e;
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+  font-size: 34px;
+  line-height: 1.26;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+.article-title-block > p {
+  display: none;
+}
+
+.article-title-block .article-meta {
+  display: block;
+  margin-top: 12px;
+  color: #827b72;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.article-screen .article-cover {
+  margin: 0 22px;
+  border-radius: 7px;
+}
+
+.article-screen .article-body {
+  padding: 24px 22px 28px;
+}
+
+.article-screen .article-body > p,
+.article-screen .article-body > p.article-lede {
+  margin: 0 0 16px;
+  color: #37342f;
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+  font-size: 17px;
+  line-height: 2;
+  font-weight: 400;
+  text-align: left;
 }
