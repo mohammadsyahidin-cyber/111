@@ -6447,3 +6447,30 @@ button:focus-visible {
   font-weight: 400;
   text-align: left;
 }
+
+/* Final outline background: match 03, keep the image still while content scrolls. */
+.screen-content.screen-content-outline {
+  overflow: hidden;
+  background-color: rgba(238, 235, 228, 0.28);
+  background-position: 33.333% center;
+  background-attachment: scroll;
+}
+
+.screen-content.screen-content-outline .outline-screen {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgba(247, 245, 240, 0.62);
+  scrollbar-width: none;
+}
+
+.screen-content.screen-content-outline .outline-screen::-webkit-scrollbar {
+  display: none;
+}
+
+.outline-screen .outline-stats div:nth-child(1) strong,
+.outline-screen .outline-stats div:nth-child(2) strong,
+.outline-screen .outline-stats div:nth-child(3) strong {
+  color: #8f6a37;
+}
