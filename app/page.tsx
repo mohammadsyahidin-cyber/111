@@ -2015,8 +2015,7 @@ function ArticleScreen({
       <article className="story-article">
         <header className="article-title-block">
           <span className="article-serial">第三章 · 故事 01</span>
-          <h1>二十岁那年，我第一次站上讲台</h1>
-          <p>一个年轻教师走进石桥小学的第一天，也是一段四十年教学生涯的开始。</p>
+          <h1>第一次站上讲台</h1>
           <div className="article-meta">
             林秀兰口述 · 子女采访整理 · 约 1,260 字
           </div>
