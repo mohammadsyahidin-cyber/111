@@ -6,12 +6,13 @@ import {
   ArrowLeft,
   ArrowRight,
   BatteryMedium,
+  BookOpen,
   Check,
   CheckCircle2,
+  ChevronsUpDown,
   ChevronRight,
   Circle,
   Clock3,
-  FileText,
   Flag,
   ListChecks,
   Menu,
@@ -24,7 +25,6 @@ import {
   RotateCcw,
   Signal,
   SkipForward,
-  Sparkles,
   Square,
   UserRound,
   Wifi,
@@ -629,9 +629,9 @@ export default function Home() {
     screen === "discovery" ||
     screen === "processing-outline"
       ? "backdrop-archive"
-      : screen === "outline" ||
-          screen === "updated" ||
-          screen === "chapter" ||
+      : screen === "outline" || screen === "updated"
+        ? "backdrop-outline"
+        : screen === "chapter" ||
           screen === "records" ||
           screen === "conversation"
         ? "backdrop-school"
@@ -722,7 +722,7 @@ export default function Home() {
                   <div className="side-biography-title">
                     <strong>{biographyName}的人生故事</strong>
                     <button type="button" onClick={openBiographySwitcher}>
-                      <RefreshCw size={12} />
+                      <ChevronsUpDown size={12} />
                       切换
                     </button>
                   </div>
@@ -782,7 +782,10 @@ export default function Home() {
                   <em>{journeyStage === "deep" ? "进行中" : "待开始"}</em>
                 </button>
               </nav>
-              <div className="side-content-title">内容成果</div>
+              <div className="side-content-title">
+                <span>内容成果</span>
+                <small>生成后的文章与资料</small>
+              </div>
               <button
                 type="button"
                 className="side-article-entry"
@@ -791,7 +794,7 @@ export default function Home() {
                   setScreen("articles");
                 }}
               >
-                <FileText size={18} />
+                <BookOpen size={18} />
                 <span>
                   <strong>传记文章</strong>
                   <small>查看已生成的故事文章</small>
@@ -867,7 +870,7 @@ export default function Home() {
           </>
         )}
 
-        <div className={`screen-content ${backdropClass}`}>
+        <div className={`screen-content ${backdropClass} screen-content-${screen}`}>
           {screen === "create-intro" && (
             <CreateBiographyEntryScreen onStart={() => setScreen("create")} />
           )}
@@ -993,7 +996,7 @@ export default function Home() {
 
           {screen === "processing-article" && (
             <ProcessingScreen
-              icon={<Sparkles size={26} />}
+              icon={<ListChecks size={26} />}
               title="小青正在整理这段回忆"
               copy="正在区分讲述人与提问者，梳理时间、人物和情绪细节。"
             />
@@ -1807,7 +1810,7 @@ function ChapterScreen({
 
       {chapter.changeNote && (
         <div className="chapter-change-note">
-          <Sparkles size={17} />
+          <ListChecks size={17} />
           {chapter.changeNote}
         </div>
       )}
@@ -1840,7 +1843,7 @@ function ChapterScreen({
               <p>{section.description}</p>
               {section.changeNote && (
                 <mark>
-                  <Sparkles size={13} />
+                  <ListChecks size={13} />
                   {section.changeNote}
                 </mark>
               )}
@@ -2009,34 +2012,13 @@ function ArticleScreen({
 }) {
   return (
     <div className="screen article-screen">
-      <div className="article-complete">
-        <CheckCircle2 size={19} />
-        本次采访已整理成文
-      </div>
-
       <article className="story-article">
         <header className="article-title-block">
-          <div className="article-serial">
-            <span>第三章</span>
-            <i />
-            <span>故事 01</span>
-          </div>
-          <h1>
-            二十岁那年，
-            <strong>我第一次站上讲台</strong>
-          </h1>
+          <span className="article-serial">第三章 · 故事 01</span>
+          <h1>二十岁那年，我第一次站上讲台</h1>
           <p>一个年轻教师走进石桥小学的第一天，也是一段四十年教学生涯的开始。</p>
-          <div className="article-title-rule">
-            <i />
-            <span>口述传记</span>
-            <i />
-          </div>
           <div className="article-meta">
-            <span className="article-author-avatar">林</span>
-            <span className="article-author-copy">
-              <strong>林秀兰 口述</strong>
-              <small>子女采访整理 · 约 1,260 字</small>
-            </span>
+            林秀兰口述 · 子女采访整理 · 约 1,260 字
           </div>
         </header>
 
@@ -2052,26 +2034,14 @@ function ArticleScreen({
         </figure>
 
         <div className="article-body">
-          <div className="article-section-label">
-            <span>01</span>
-            <i />
-            <strong>初到石桥</strong>
-          </div>
           <p className="article-lede">
             那是 1976
             年秋天，我提着一只旧藤箱，第一次走进石桥小学。教室比我想象中还要小，窗纸破了两块，二十几个孩子齐刷刷地看着我。那一刻，我连事先准备好的第一句话都忘了。
           </p>
           <blockquote>
-            <span>“</span>
             <p>王校长把一把旧雨伞递给我，说，山里的雨说来就来，老师不能让孩子等。</p>
-            <cite>林秀兰回忆</cite>
           </blockquote>
 
-          <div className="article-section-label">
-            <span>02</span>
-            <i />
-            <strong>第一声“林老师”</strong>
-          </div>
           <p>
             第一堂课讲的是一篇短短的课文。下课铃响以后，没有一个孩子起身。我以为自己讲错了，后来才知道，他们只是从没见过这么年轻的老师。一个扎羊角辫的小姑娘跑过来，小声喊了第一句“林老师”。
           </p>
@@ -2127,7 +2097,7 @@ function UpdatedOutlineScreen({
     <div className="screen updated-screen">
       <div className="update-summary">
         <div className="update-icon">
-          <Sparkles size={23} />
+          <ListChecks size={23} />
         </div>
         <div>
           <span className="eyebrow">采访提纲已更新为 v2</span>
@@ -2177,7 +2147,7 @@ function UpdatedOutlineScreen({
                 </span>
                 {chapter.changeNote && (
                   <mark className="chapter-change-label">
-                    <Sparkles size={13} />
+                    <ListChecks size={13} />
                     {chapter.changeNote}
                   </mark>
                 )}

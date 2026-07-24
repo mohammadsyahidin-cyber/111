@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "山顶传记 · 子女协助采访原型",
   description:
     "从初步了解、动态提纲到录音采访和文章生成的高保真交互原型。",
+  manifest: "./manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "山顶传记",
+  },
 };
 
 export default function RootLayout({
