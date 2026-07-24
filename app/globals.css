@@ -3473,11 +3473,11 @@ button:focus-visible {
 }
 
 .home-stage-card {
-  min-height: 540px;
+  min-height: 620px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 23px 20px 21px;
+  padding: 28px 20px 24px;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 8px;
@@ -4588,12 +4588,12 @@ button:focus-visible {
 
 .create-entry-card {
   width: 100%;
-  min-height: 620px;
+  min-height: 500px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-end;
-  padding: 46px 24px 30px;
+  justify-content: center;
+  padding: 34px 24px 26px;
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.76);
