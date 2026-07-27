@@ -1,5 +1,5 @@
 const BASE_PATH = new URL(self.registration.scope).pathname;
-const CACHE_NAME = "shanding-pwa-v2";
+const CACHE_NAME = "shanding-pwa-v3";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([BASE_PATH])));
